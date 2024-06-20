@@ -87,8 +87,8 @@ export default function Volunteer() {
     };
 
     const [selectedStateOptions, setSelectedStateOptions] = useState ([])
-    const handleStateChange = (selectedSkillOptions) => {
-            setSelectedSkillOptions(selectedStateOptions);
+    const handleStateChange = (selectedStateOptions) => {
+            setSelectedStateOptions(selectedStateOptions);
     };
 
     const [selectedDates, setSelectedDates] = useState([])
@@ -171,7 +171,7 @@ export default function Volunteer() {
                             <input type="text" id="city" name="city" placeholder="Enter your city" maxLength="100" required></input>
                         </div>
                         <div className="w-1/3">
-                            <label for="p_state">State:</label>
+                            <label>State:</label>
                             <Select
                             options={stateOptions}
                             value={selectedStateOptions}
