@@ -195,7 +195,7 @@ export default function Administrator() {
                             isMulti={true}
                         />
                     </div>
-                    <div className="mb-4>
+                    <div className="mb-4">
                         <label for="preferences">Preferences: </label>
                         <textarea id="preferences" name="preferences" rows="4" cols="50" className="w-full border border-black"></textarea>
                     </div>
