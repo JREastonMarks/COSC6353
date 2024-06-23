@@ -1,5 +1,5 @@
 export default function Page() {
     return (
-        <div><h1>Notification</h1></div>
+        <div><h1>Administrator Notifications</h1></div>
     )
 }
