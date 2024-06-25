@@ -123,7 +123,7 @@ export default function VolunteerNotifications() {
           <form onSubmit={handleSendMessage}>
             <input
               type="text"
-              placeholder="Recipient (Email/User ID/Name)"
+              placeholder="Recipient (Email/Name)"
               className="border border-gray-300 p-2 rounded w-full mb-4"
             />
             <input
