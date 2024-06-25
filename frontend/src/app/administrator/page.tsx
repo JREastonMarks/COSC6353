@@ -212,7 +212,9 @@ export default function Administrator() {
                             showToday={false}
                         />
                         <p>Selected Dates: {selectedDates.map(date => date.format("MM/DD/YYYY")).join(", ")}</p>
-                        {selectedDates.length >= 5}
+                        {selectedDates.length >= 5 && (
+                            <p>Maximum 5 dates can be selected!</p>
+                        )}
                     </div>
                     
             </div>
