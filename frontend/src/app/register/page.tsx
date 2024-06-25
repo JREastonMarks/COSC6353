@@ -24,12 +24,12 @@ export default function Register() {
                     <label for="password">Password: </label>
                     <input type="text" id="password" name="password" placeholder="Enter your password" minLength="6" maxLength="20" required></input>
                 </div>
-                <div>
+                <div className="mb-4">
                     <label for="password">Confirm Password: </label>
                     <input type="text" id="password" name="password" placeholder="Confirm your password" minLength="6" maxLength="20" required></input>
                 </div>
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" className="bg-black text-white py-2 px-4 rounded">Submit</button>
         </div>
     );
 }
