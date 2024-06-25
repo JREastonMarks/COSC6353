@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
+<<<<<<< HEAD
+=======
+import { availableMemory } from "process";
+>>>>>>> 5d916e4f271cc68e926cfd8aa205007886e41d63
 
 const skillOptions = [
     { value: "Database Management", label: "Database Management" },
