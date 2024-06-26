@@ -113,22 +113,22 @@ export default function Administrator() {
                 <h2 className="font-bold">Full Name</h2>
             </div>
             <div className="w-full">
-                <label for="last_name">Last Name: </label>
+                <label htmlFor="last_name">Last Name: </label>
                 <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" maxLength="25" required></input>
             </div>
             <div className="flex flex-row justify-center w-full mb-4">
                 <div className="w-1/2">
-                    <label for="first_name">First Name:  </label>
+                    <label htmlFor="first_name">First Name:  </label>
                     <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" maxLength="25" required></input>
                 </div>
                 <div className="w-1/2">
-                    <label for="middle_initial">Middle initial: </label>
+                    <label htmlFor="middle_initial">Middle initial: </label>
                     <input type="text" id="middle_initial" name="middle_initial" placeholder="Enter your middle initial" maxLength="1"></input>
                 </div>
             </div>
                 
             <div className="flex flex-row w-full mb-4">
-                <label for="dob">Date of Birth:  </label>
+                <label htmlFor="dob">Date of Birth:  </label>
                 <input type="date" id="dob" name="dob" required></input>
                 <div className="flex flex-row justify-center w-1/2">
                     <div className="mr-4">
@@ -136,11 +136,11 @@ export default function Administrator() {
                     </div>
                     <div className="mr-4">
                         <input type="radio" id="female" name="sex" value="female" className="mr-2"></input>
-                        <label for="female">Female</label>
+                        <label htmlFor="female">Female</label>
                     </div>
                     <div>
                         <input type="radio" id="male" name="sex" value="male" className="mr-2"></input>
-                        <label for="male">Male</label>
+                        <label htmlFor="male">Male</label>
                     </div>
                 </div>
             </div>
@@ -148,11 +148,11 @@ export default function Administrator() {
                     <h2 className="font-bold">Phone numbers</h2>
                     <div className="flex flex-row w-full">
                         <div className="w-1/2">
-                            <label for="cell_phone">Cell phone: </label>
+                            <label htmlFor="cell_phone">Cell phone: </label>
                             <input type="tel" id="cell_phone" name="cell_phone" placeholder="Enter your cell phone" minLength="10" maxLength="10" required></input>
                         </div>
                         <div className="w-1/2">
-                            <label for="work_phone">Work phone: </label>
+                            <label htmlFor="work_phone">Work phone: </label>
                             <input type="tel" id="work_phone" name="work_phone" placeholder="Enter your work phone" minLength="10" maxLength="10"></input>
                         </div>
                     </div>
@@ -160,46 +160,48 @@ export default function Administrator() {
             <div className="w-full mb-4">
                     <h2 className="font-bold mb-2">Address</h2>
                     <div>
-                        <label for="address">Address: </label>
+                        <label htmlFor="address">Address: </label>
                         <input type="text" id="address" name="address" placeholder="Street number and name" maxLength="100" required></input> 
                     </div>
                     <div>
-                        <label for="address2">Address 2: </label>
+                        <label htmlFor="address2">Address 2: </label>
                         <input type="text" id="address2" name="address2" placeholder="Optional" maxLength="100"></input> 
                     </div>
                     <div className="flex flex-row justify-between w-full mb-4">
                         <div className="w-1/3">
-                            <label for="city">City: </label>
+                            <label htmlFor="city">City: </label>
                             <br></br>
                             <input type="text" id="city" name="city" placeholder="Enter your city" maxLength="100" required></input>
                         </div>
                         <div className="w-1/3">
-                            <label>State:</label>
+                            <label htmlFor="state">State:</label>
                             <Select
                             options={stateOptions}
                             value={selectedStateOptions}
                             onChange={handleStateChange}
+                            id="state"
                             className="w-1/2"
                         />
                         </div>
                         <div className="w-1/3">
-                            <label for="p_zipcode">Zip Code: </label>
+                            <label htmlFor="p_zipcode">Zip Code: </label>
                             <br></br>
                             <input type="text" id="p_zipcode" name="p_zipcode" placeholder="Enter your zipcode" minLength="5" maxLength="9" required></input>
                         </div>
                     </div>
                     <div className="mb-4">
-                        <label className="font-bold mb-2">Skills (maximum 3 skills)</label>
+                        <label htmlFor="skill" className="font-bold mb-2">Skills (maximum 3 skills)</label>
                         <br></br>
                         <Select
                             options={skillOptions}
                             value={selectedSkillOptions}
                             onChange={handleSkillChange}
+                            id="skill"
                             isMulti={true}
                         />
                     </div>
                     <div className="mb-4">
-                        <label for="preferences">Preferences: </label>
+                        <label htmlFor="preferences">Preferences: </label>
                         <textarea id="preferences" name="preferences" rows="4" cols="50" className="w-full border border-black"></textarea>
                     </div>
                     <div>

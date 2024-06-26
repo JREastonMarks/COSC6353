@@ -3,10 +3,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
-<<<<<<< HEAD
-=======
-import { availableMemory } from "process";
->>>>>>> 5d916e4f271cc68e926cfd8aa205007886e41d63
 
 const skillOptions = [
     { value: "Database Management", label: "Database Management" },
@@ -56,33 +52,34 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
     
         <div className="flex flex-col items-center justify-center p-24">
             <h1 className="font-bold text-4xl mb-2">Event - {params.id}</h1>
-            <h2 font-bold mb-8>Event Management</h2>
+            <h2 className="font-bold mb-8">Event Management</h2>
             <br></br>
             
             <div className="w-full">
-                <label for="event name">Event Name: </label> <br></br>
+                <label htmlFor="event name">Event Name: </label> <br></br>
                 <input type="text" id="event name" name="event name" placeholder="Event's Name here" maxLength="50" required size="50" className="border border-black"></input>
             </div>
             
             <br></br>
             
             <div className="w-full">
-                <label for="event desc">Event Description: </label> <br></br>
+                <label htmlFor="event desc">Event Description: </label> <br></br>
                 <textarea id="event desc" name="event desc" placeholder="Event's description here" required rows="4" cols="50" className="border border-black"></textarea>
             </div>
             
             <br></br>
 
             <div className="w-full">
-                <label for="location">Location: </label><br></br>
+                <label htmlFor="location">Location: </label><br></br>
                 <textarea id="location" name="location" required placeholder="Event's location here" rows="4" cols="50" size="50" className="border border-black"></textarea>
             </div> 
 
             <br></br>
 
             <div className="w-full">
-                <label for="required skills" required>Required Skills:</label>
+                <label htmlFor="required skills">Required Skills:</label>
                 <Select
+                    required
                     options={skillOptions}
                     value={selectedSkillOptions}
                     onChange={handleSkillChange}
@@ -93,7 +90,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
             <br></br>
             
             <div className="w-full">
-                <label for="urgency">Urgency:</label>
+                <label htmlFor="urgency">Urgency:</label>
                 <select name="urgency" id="urgency" className="border border-black">
                     <option value="low">Low</option>
                     <option value="med">Medium</option>
@@ -104,7 +101,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
             <br></br>
 
             <div className="w-full">
-                <label for="event date">Event Date: </label>
+                <label htmlFor="event date">Event Date: </label>
                 <input type="date" id="event date" name="event date" className="border border-black"></input>
             </div> 
 

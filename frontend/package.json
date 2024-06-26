@@ -9,11 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "next": "14.2.4",
-    "react": "^18",
-    "react-dom": "^18",
-=======
     "intl": "^1.2.5",
     "date-fns": "^3.6.0",
     "multiselect-react-dropdown": "^2.0.25",
@@ -22,7 +17,6 @@
     "react-datepicker": "^7.1.0",
     "react-dom": "^18.3.1",
     "react-multi-date-picker": "^4.5.2",
->>>>>>> 5d916e4f271cc68e926cfd8aa205007886e41d63
     "react-select": "^5.8.0"
   },
   "devDependencies": {
@@ -30,11 +24,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-<<<<<<< HEAD
-    "eslint-config-next": "14.2.4",
-=======
     "eslint-config-next": "^14.2.4",
->>>>>>> 5d916e4f271cc68e926cfd8aa205007886e41d63
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
