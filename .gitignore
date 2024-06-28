@@ -1,3 +1,9 @@
 
 .project
 frontend/package-lock.json
+frontend/package-lock.json
+backend/target/classes/META-INF/MANIFEST.MF
+backend/.settings/
+backend/.settings/.classpath
+backend/target/
+backend/.classpath
