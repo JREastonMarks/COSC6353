@@ -25,11 +25,32 @@ interface User {
 
 const Notification: React.FC<NotificationProps> = ({ title, sender, message, date }) => {
   return (
-    <div className="notification border border-gray-300 p-4 rounded-md mb-4">
-      <h3 className="font-semibold">{title}</h3>
-      <p>from: {sender}</p>
-      <p>{message}</p>
-      <small className="text-gray-500">{new Date(date).toLocaleString()}</small>
+    <div className="mx-full">
+      <div className="bg-white rounded shadow">
+        <div className="py-8 font-bold text-black text-center text-md tracking-widest uppercase">
+            {title}
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-1 font-bold text-right">
+                From:
+            </div>
+            <div className="sm:col-span-2">{sender}</div>
+        </div>
+        <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-1 font-bold text-right">
+                Date:
+            </div>
+            <div className="sm:col-span-2">{new Date(date).toLocaleString()}</div>
+        </div>
+        <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-1 font-bold text-left">
+                Message
+            </div>
+        </div>
+        <div className="mb-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-12">{message}</div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -69,9 +90,16 @@ export default function AdministratorNotifications() {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      const response = await fetch('/api/notifications');
-      const data = await response.json();
-      setNotifications(data);
+      // const response = await fetch('/api/notifications');
+      // const data = await response.json();
+      let message: NotificationProps = {
+        sender: "Event Management",
+        title: "New Event Scheduled",
+        message: "You have a new event scheduled for July 4th, 2024.",
+        date: "7/29/2024"
+      }
+      const messages = [message];
+      setNotifications(messages);
     };
 
     fetchNotifications();
@@ -93,67 +121,93 @@ export default function AdministratorNotifications() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center p-24">
-      <h1 className="font-bold text-4xl mb-8">Notifications</h1>
-      <div className="mb-8">
-        {notifications.length === 0 ? (
-          <p className="text-gray-500 text-center">NO NOTIFICATIONS YET!
-          <br></br>when you get a message it'll be shown here.</p>
-        ) : (
-          notifications.map((notification, index) => (
-            <Notification
-              key={index}
-              title={notification.title}
-              message={notification.message}
-              date={notification.date}
-            />
-          ))
-        )}
-      </div>
-      <div className="mb-4 w-full">
-        <button
-          onClick={() => setShowCreateMessage(!showCreateMessage)}
-          className="bg-black text-white py-2 px-4 rounded"
-        >
-          {showCreateMessage ? 'Cancel' : 'Create New Message'}
-        </button>
-      </div>
-      {showCreateMessage && (
-        <div className="create-message-form border border-gray-300 p-4 rounded-md mb-8">
-          <h2 className="font-semibold mb-4">Create New Message</h2>
-          <form onSubmit={handleSendMessage}>
-            <input
-              type="text"
-              placeholder="Recipient (Email/User ID/Name)"
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-            />
-            <input
-              type="text"
-              placeholder="Title"
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-            />
-            <textarea
-              placeholder="Message"
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-              rows={4}
-            />
-            <button type="submit" className="bg-black text-white py-2 px-4 rounded">
-              Send
-            </button>
-          </form>
+    <div className="container mx-auto p-16">
+      <div className="mx-auto">
+          <div className="bg-white rounded shadow">
+              <div className="bg-grey-lightest px-16 py-10">
+                  <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
+                    Notifications - ({notifications.length})
+                  </div>
+              </div>
+              <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-16">
+                {notifications.length === 0 ? (
+                    <p className="text-gray-500 text-center">NO NOTIFICATIONS YET!
+                    <br></br>when you get a message it'll be shown here.</p>
+                  ) : (
+                    notifications.map((notification, index) => (
+                      <Notification key={index} sender={notification.sender} title={notification.title} message={notification.message} date={notification.date} />
+                  ))
+                )}
+            </div>
+            <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-16">
+              
+            </div>
+          </div>    
         </div>
-      )}
-      <div className="w-full">
-        <h2 className="font-semibold mb-4">Search Users</h2>
-        <input
-          type="text"
-          placeholder="Search by Email/User ID/Name"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="border border-gray-300 p-2 rounded w-full mb-4"
-        />
-        <UserList users={users} searchQuery={searchQuery} />
       </div>
-    </div>
+    
+    
+    // <div className="flex flex-col justify-center items-center p-24">
+    //   <h1 className="font-bold text-4xl mb-8">Notifications</h1>
+    //   <div className="mb-8">
+    //     {notifications.length === 0 ? (
+    //       <p className="text-gray-500 text-center">NO NOTIFICATIONS YET!
+    //       <br></br>when you get a message it'll be shown here.</p>
+    //     ) : (
+    //       notifications.map((notification, index) => (
+    //         <Notification
+    //           key={index}
+    //           title={notification.title}
+    //           message={notification.message}
+    //           date={notification.date}
+    //         />
+    //       ))
+    //     )}
+    //   </div>
+    //   <div className="mb-4 w-full">
+    //     <button
+    //       onClick={() => setShowCreateMessage(!showCreateMessage)}
+    //       className="bg-black text-white py-2 px-4 rounded"
+    //     >
+    //       {showCreateMessage ? 'Cancel' : 'Create New Message'}
+    //     </button>
+    //   </div>
+    //   {showCreateMessage && (
+    //     <div className="create-message-form border border-gray-300 p-4 rounded-md mb-8">
+    //       <h2 className="font-semibold mb-4">Create New Message</h2>
+    //       <form onSubmit={handleSendMessage}>
+    //         <input
+    //           type="text"
+    //           placeholder="Recipient (Email/User ID/Name)"
+    //           className="border border-gray-300 p-2 rounded w-full mb-4"
+    //         />
+    //         <input
+    //           type="text"
+    //           placeholder="Title"
+    //           className="border border-gray-300 p-2 rounded w-full mb-4"
+    //         />
+    //         <textarea
+    //           placeholder="Message"
+    //           className="border border-gray-300 p-2 rounded w-full mb-4"
+    //           rows={4}
+    //         />
+    //         <button type="submit" className="bg-black text-white py-2 px-4 rounded">
+    //           Send
+    //         </button>
+    //       </form>
+    //     </div>
+    //   )}
+    //   <div className="w-full">
+    //     <h2 className="font-semibold mb-4">Search Users</h2>
+    //     <input
+    //       type="text"
+    //       placeholder="Search by Email/User ID/Name"
+    //       value={searchQuery}
+    //       onChange={(e) => setSearchQuery(e.target.value)}
+    //       className="border border-gray-300 p-2 rounded w-full mb-4"
+    //     />
+    //     <UserList users={users} searchQuery={searchQuery} />
+    //   </div>
+    // </div>
   );
 }

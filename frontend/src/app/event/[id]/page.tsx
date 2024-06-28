@@ -3,6 +3,11 @@
 import React, { useState } from "react";
 import Select from "react-select";
 
+const urgencyOptions = [
+    { value: "low", label: "Low" },
+    { value: "med", label: "Medium"},
+    { value: "high", label: "High"},
+]
 const skillOptions = [
     { value: "Database Management", label: "Database Management" },
     { value: "IT Proficiency", label: "IT Proficiency" },
@@ -105,6 +110,11 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
     const handleStateChange = (selectedStateOptions: string[]) => {
         setSelectedStateOptions(selectedStateOptions);
     };
+
+    const [selectedUrgencyOptions, setSelectedUrgencyOptions] = useState<string[]>([])
+    const handleUrgencyChange = (urgencyOptions: string[]) => {
+        setSelectedUrgencyOptions(urgencyOptions);
+    };
     
     return (
         <div className="container mx-auto p-16">
@@ -196,11 +206,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="urgency" className="block text-sm font-medium leading-6 text-gray-900">Urgency</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <select id="urgency" name="urgency" className="text-gray-900 placeholder:text-gray-400" >
-                                        <option value="low">Low</option>
-                                        <option value="med">Medium</option>
-                                        <option value="high">High</option>
-                                    </select>
+                                    <Select id="urgency" name="urgency" required options={urgencyOptions} value={selectedUrgencyOptions} onChange={handleUrgencyChange} isMulti={false} className="text-gray-900 placeholder:text-gray-400" />
                                 </div>
                             </div>
                         </div>

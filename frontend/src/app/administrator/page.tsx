@@ -261,12 +261,12 @@ export default function Administrator() {
                             </div>
                         </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-6">
                                 <div className="mt-4">
                                     <label htmlFor="datePicker" className="block text-sm font-medium leading-6 text-gray-900">Availability</label>
                                 </div>
-                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" />
+                                <div className="flex ">
+                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="block flex-1 text-gray-900 placeholder:text-gray-400" />
                                 </div>
                                 <div className="mt-2">
                                     <p>Selected Dates: {selectedDates.map(date => date.format("MM/DD/YYYY")).join(", ")}</p>
