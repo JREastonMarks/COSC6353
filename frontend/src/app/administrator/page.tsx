@@ -276,12 +276,14 @@ export default function Administrator() {
                                 </div>
                             </div>
                         </div>
+                        <div className="mt-4 bg-sky-400 text-white">
+                            <button className="p-2 w-full">
+                                Save
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-        
-        //     <button type="submit" className="bg-black text-white py-2 px-4 rounded">Save</button>
-        // </div>
     );
 }

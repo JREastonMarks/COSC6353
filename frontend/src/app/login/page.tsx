@@ -20,11 +20,11 @@ export default function Login() {
                         </div>
                     </form>
                     <div className="border-t px-10 py-6">
-                    <div className="flex justify-between">
-                        <a href="/register" className="font-bold text-primary hover:text-primary-dark no-underline">Don't have an account?</a>
-                        <a href="#" className="text-grey-darkest hover:text-black no-underline">Forgot Password?</a>
+                        <div className="flex justify-between">
+                            <a href="/register" className="font-bold text-primary hover:text-primary-dark no-underline">Don't have an account?</a>
+                            <a href="#" className="text-grey-darkest hover:text-black no-underline">Forgot Password?</a>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
