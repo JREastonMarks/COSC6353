@@ -89,7 +89,7 @@ export default function Administrator() {
 
     const [selectedStateOptions, setSelectedStateOptions] = useState<string[]>([])
     const handleStateChange = (selectedStateOptions: string[]) => {
-            setSelectedStateOptions(selectedStateOptions);
+        setSelectedStateOptions(selectedStateOptions);
     };
 
     const [selectedDates, setSelectedDates] = useState<Date[]>([])
@@ -100,127 +100,188 @@ export default function Administrator() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center p-24">
-            <h1 className="font-bold text-4xl mb-2">Administrator</h1>
-            <h2 className="font-bold mb-8">Profile Management</h2>
-            <div className="w-full mb-2">
-                <h2>user ID:</h2>
-                <h2>username: </h2>
-            <div className="flex flex-row w-full">
-                <h2 className="w-1/2 mb-2">password: </h2>
-                <button type="submit" className="bg-black text-white py-2 px-4 rounded">Change Password</button>
-            </div>
-                <h2 className="font-bold">Full Name</h2>
-            </div>
-            <div className="w-full">
-                <label htmlFor="last_name">Last Name: </label>
-                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" maxLength="25" required></input>
-            </div>
-            <div className="flex flex-row justify-center w-full mb-4">
-                <div className="w-1/2">
-                    <label htmlFor="first_name">First Name:  </label>
-                    <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" maxLength="25" required></input>
+        <div className="container mx-auto p-16">
+            <div className="mx-auto">
+                <div className="bg-white rounded shadow">
+                    <form className="bg-grey-lightest px-16 py-10">
+                        <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
+                            Profile Management
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">E-Mail</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-3">
+                                <div className="mt-2">
+                                    <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">First Name</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="firstName" name="firstName" placeholder="Enter you first name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="middleInitial" className="block text-sm font-medium leading-6 text-gray-900">Middle Initial</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-3">
+                                <div className="mt-2">
+                                    <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="lastName" name="lastName" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Enter you last name" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="dob" className="block text-sm font-medium leading-6 text-gray-900">Date of Birth</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="date" id="dob" name="dob" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="flex ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="radio" id="male" name="sex" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">Male</label>
+                                    <input type="radio" id="female" name="sex" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="cellPhone" className="block text-sm font-medium leading-6 text-gray-900">Cell Phone</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="cellPhone" name="cellPhone" placeholder="Enter you cell phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="workPhone" className="block text-sm font-medium leading-6 text-gray-900">Work Phone</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="workPhone" name="workPhone" placeholder="Enter you work phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="address1" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="address2" className="block text-sm font-medium leading-6 text-gray-900">Address 2</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">City</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">State</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <Select options={stateOptions} value={selectedStateOptions} onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required></Select>
+                                </div>
+                            </div>
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="zipcode" className="block text-sm font-medium leading-6 text-gray-900">Zip Code</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <label htmlFor="skill" className="block text-sm font-medium leading-6 text-gray-900">Skills (Max 3)</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <Select options={skillOptions} value={selectedSkillOptions} onChange={handleSkillChange} id="skill" name="skill" className="block flex-1 text-gray-900 placeholder:text-gray-400" required></Select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <label htmlFor="preferences" className="block text-sm font-medium leading-6 text-gray-900">Preferences</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                    <textarea id="preferences" name="preferences" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-3">
+                                <div className="mt-4">
+                                    <label htmlFor="datePicker" className="block text-sm font-medium leading-6 text-gray-900">Availability</label>
+                                </div>
+                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" />
+                                </div>
+                                <div className="mt-2">
+                                    <p>Selected Dates: {selectedDates.map(date => date.format("MM/DD/YYYY")).join(", ")}</p>
+                                    {selectedDates.length >= 5 && (
+                                        <p>Maximum 5 dates can be selected!</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div className="w-1/2">
-                    <label htmlFor="middle_initial">Middle initial: </label>
-                    <input type="text" id="middle_initial" name="middle_initial" placeholder="Enter your middle initial" maxLength="1"></input>
-                </div>
             </div>
-                
-            <div className="flex flex-row w-full mb-4">
-                <label htmlFor="dob">Date of Birth:  </label>
-                <input type="date" id="dob" name="dob" required></input>
-                <div className="flex flex-row justify-center w-1/2">
-                    <div className="mr-4">
-                        <label>Sex: </label>
-                    </div>
-                    <div className="mr-4">
-                        <input type="radio" id="female" name="sex" value="female" className="mr-2"></input>
-                        <label htmlFor="female">Female</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="male" name="sex" value="male" className="mr-2"></input>
-                        <label htmlFor="male">Male</label>
-                    </div>
-                </div>
-            </div>
-            <div className="w-full mb-4">
-                    <h2 className="font-bold">Phone numbers</h2>
-                    <div className="flex flex-row w-full">
-                        <div className="w-1/2">
-                            <label htmlFor="cell_phone">Cell phone: </label>
-                            <input type="tel" id="cell_phone" name="cell_phone" placeholder="Enter your cell phone" minLength="10" maxLength="10" required></input>
-                        </div>
-                        <div className="w-1/2">
-                            <label htmlFor="work_phone">Work phone: </label>
-                            <input type="tel" id="work_phone" name="work_phone" placeholder="Enter your work phone" minLength="10" maxLength="10"></input>
-                        </div>
-                    </div>
-            </div>
-            <div className="w-full mb-4">
-                    <h2 className="font-bold mb-2">Address</h2>
-                    <div>
-                        <label htmlFor="address">Address: </label>
-                        <input type="text" id="address" name="address" placeholder="Street number and name" maxLength="100" required></input> 
-                    </div>
-                    <div>
-                        <label htmlFor="address2">Address 2: </label>
-                        <input type="text" id="address2" name="address2" placeholder="Optional" maxLength="100"></input> 
-                    </div>
-                    <div className="flex flex-row justify-between w-full mb-4">
-                        <div className="w-1/3">
-                            <label htmlFor="city">City: </label>
-                            <br></br>
-                            <input type="text" id="city" name="city" placeholder="Enter your city" maxLength="100" required></input>
-                        </div>
-                        <div className="w-1/3">
-                            <label htmlFor="state">State:</label>
-                            <Select
-                            options={stateOptions}
-                            value={selectedStateOptions}
-                            onChange={handleStateChange}
-                            id="state"
-                            className="w-1/2"
-                        />
-                        </div>
-                        <div className="w-1/3">
-                            <label htmlFor="p_zipcode">Zip Code: </label>
-                            <br></br>
-                            <input type="text" id="p_zipcode" name="p_zipcode" placeholder="Enter your zipcode" minLength="5" maxLength="9" required></input>
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="skill" className="font-bold mb-2">Skills (maximum 3 skills)</label>
-                        <br></br>
-                        <Select
-                            options={skillOptions}
-                            value={selectedSkillOptions}
-                            onChange={handleSkillChange}
-                            id="skill"
-                            isMulti={true}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="preferences">Preferences: </label>
-                        <textarea id="preferences" name="preferences" rows="4" cols="50" className="w-full border border-black"></textarea>
-                    </div>
-                    <div>
-                        <h2 className="font-bold">Availability</h2>
-                        <DatePicker
-                            mode="multiple"
-                            value={selectedDates}
-                            onChange={handleDateChange}
-                            disabledDate={(date) => date < addDays(new Date(), 0)}
-                            showToday={false}
-                        />
-                        <p>Selected Dates: {selectedDates.map(date => date.format("MM/DD/YYYY")).join(", ")}</p>
-                        {selectedDates.length >= 5 && (
-                            <p>Maximum 5 dates can be selected!</p>
-                        )}
-                    </div>
-                    
-            </div>
-            <button type="submit" className="bg-black text-white py-2 px-4 rounded">Save</button>
         </div>
+        
+        //     <button type="submit" className="bg-black text-white py-2 px-4 rounded">Save</button>
+        // </div>
     );
 }
