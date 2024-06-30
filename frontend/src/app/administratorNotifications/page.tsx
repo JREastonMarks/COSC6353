@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 
 interface NotificationProps {
-  sender: string;  
+  receiver: User;
+  sender: User;  
   title: string;
   message: string;
   date: string;
@@ -11,16 +12,13 @@ interface NotificationProps {
 
 interface User {
     id: string;
-    full_name: string;
-    last_name: string;
-    first_name: string;
-    middle_initial: string;
-    cell_phone: number;
-    work_phone: number;
+    lastName: string;
+    firstName: string;
+    middleInitial: string;
+    cellPhone: number;
+    workPhone: number;
     email: string;
-    skills: string[];
-    preferences: string[];
-    availability_status: string;
+    
 }
 
 const Notification: React.FC<NotificationProps> = ({ title, sender, message, date }) => {
@@ -34,7 +32,7 @@ const Notification: React.FC<NotificationProps> = ({ title, sender, message, dat
             <div className="sm:col-span-1 font-bold text-right">
                 From:
             </div>
-            <div className="sm:col-span-2">{sender}</div>
+            <div className="sm:col-span-2">{sender.firstName} {sender.middleInitial} {sender.lastName}</div>
         </div>
         <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-1 font-bold text-right">
@@ -90,16 +88,16 @@ export default function AdministratorNotifications() {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      // const response = await fetch('/api/notifications');
-      // const data = await response.json();
-      let message: NotificationProps = {
-        sender: "Event Management",
-        title: "New Event Scheduled",
-        message: "You have a new event scheduled for July 4th, 2024.",
-        date: "7/29/2024"
-      }
-      const messages = [message];
-      setNotifications(messages);
+      const response = await fetch('/api/notifications');
+      const data = await response.json();
+      // let message: NotificationProps = {
+      //   sender: "Event Management",
+      //   title: "New Event Scheduled",
+      //   message: "You have a new event scheduled for July 4th, 2024.",
+      //   date: "7/29/2024"
+      // }
+      // const messages = [message];
+      setNotifications(data);
     };
 
     fetchNotifications();
@@ -107,8 +105,9 @@ export default function AdministratorNotifications() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch('/api/users'); // You need to create this API endpoint
-      const data = await response.json();
+      // const response = await fetch('/api/users'); // You need to create this API endpoint
+      // const data = await response.json();
+      const data = [];
       setUsers(data);
     };
 

@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class EventManagerApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void testMain() {
+		EventManagerApplication.main(new String[] {});
 	}
 
 }

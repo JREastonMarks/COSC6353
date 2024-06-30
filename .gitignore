@@ -7,3 +7,4 @@ backend/.settings/
 backend/.settings/.classpath
 backend/target/
 backend/.classpath
+.vscode/settings.json
