@@ -11,19 +11,19 @@ import edu.uh.nsm.cosc.eventmanager.service.NotificationService;
 
 @RestController
 public class NotificationController {
-	private NotificationService messageService;
+	private NotificationService notificationService;
 	
-	public NotificationController(NotificationService messageService) {
-		this.messageService = messageService;
+	public NotificationController(NotificationService notificationService) {
+		this.notificationService = notificationService;
 	}
 	
 	@GetMapping(path="/notifications")
 	List<Notification> messages() {
-		return messageService.getNotifications();
+		return notificationService.getNotifications();
 	}
 	
 	@GetMapping(path="/notification/{notificationId}")
 	Notification message(@PathVariable(required=true) long notificationId) {
-		return messageService.getNotification(notificationId);
+		return notificationService.getNotification(notificationId);
 	}
 }

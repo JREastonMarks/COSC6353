@@ -35,6 +35,7 @@ public class NotificationControllerIntegrationTest {
 		Notification notification = new Notification();
 		notification.setTitle("Message 1");
 		notifications.add(notification);
+		
 		when(notificationService.getNotifications()).thenReturn(notifications);
 		
 		this.mockMvc.perform(get("/notifications")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1")));
@@ -42,11 +43,12 @@ public class NotificationControllerIntegrationTest {
 	
 	@Test
 	void notificationShouldReturnMessages() throws Exception {
-
 		Notification notification = new Notification();
+		notification.setId(1L);
 		notification.setTitle("Message 1");
+		
 		when(notificationService.getNotification(1L)).thenReturn(notification);
 		
-		this.mockMvc.perform(get("/notification/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1")));
+		this.mockMvc.perform(get("/notification/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1"))).andExpect(content().string(containsString("1")));
 	}
 }

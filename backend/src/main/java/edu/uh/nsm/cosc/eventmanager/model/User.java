@@ -2,16 +2,33 @@ package edu.uh.nsm.cosc.eventmanager.model;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class User implements Serializable {
 	private static final long serialVersionUID = 8455135942008217481L;
 	
 	long id;
+	
+	@Size(min=1, max=255, message="First name must be greater than 1 and less than 255 characters")
 	String firstName;
+	
+	@Size(min=1, max=255, message="Last name must be greater than 1 and less than 255 characters")
 	String lastName;
+	
+	@Size(min=0, max=1, message="Middle initial must be less than 1 character")
 	String middleInitial;
+	
+	@NotNull(message="Cell phone must not be null")
 	String cellPhone;
+	
+	@NotNull(message="Work phone must not be null")
 	String workPhone;
+	
+	@Email
 	String email;
+	
 	public long getId() {
 		return id;
 	}

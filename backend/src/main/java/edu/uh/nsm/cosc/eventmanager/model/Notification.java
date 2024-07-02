@@ -3,14 +3,21 @@ package edu.uh.nsm.cosc.eventmanager.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.validation.constraints.Size;
+
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 4079829834776529782L;
 
 	long id;
 	User receiver;
 	User sender;
+	
+	@Size(min=1, max=255, message="Tiltle must be greater than 1 and less than 255 characters")
 	String title;
+	
+	@Size(min=1, max=255, message="Message must be greater than 1 and less than 255 characters")
 	String message;
+	
 	Date date;
 
 	public long getId() {

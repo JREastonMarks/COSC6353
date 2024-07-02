@@ -14,6 +14,10 @@ import edu.uh.nsm.cosc.eventmanager.model.User;
 @Service
 public class NotificationRepository {
 	
+	public List<Notification> findAllByUser(User user) {
+		return new ArrayList<Notification>();
+	}
+	
 	public List<Notification> findAll() {
 		User sender = new User();
 		sender.setFirstName("firstS");
