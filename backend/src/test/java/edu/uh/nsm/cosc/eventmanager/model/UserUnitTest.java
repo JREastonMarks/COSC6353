@@ -54,7 +54,7 @@ public class UserUnitTest {
 		assertThat(user.getFirstName()).isEqualTo("first");
 		assertThat(user.getMiddleInitial()).isEqualTo("i");
 		assertThat(user.getLastName()).isEqualTo("last");
-		assertThat(user.getBirthDate()).isEqualTo(birthdate.parseObject("2005-05-05"));
+		assertThat(user.getBirthdate()).isEqualTo(birthdate.parseObject("2005-05-05"));
 		assertThat(user.getSex()).isEqualTo(Sex.female);
 		assertThat(user.getAddress()).isEqualTo("1 1st Rd");
 		assertThat(user.getAddress2()).isEqualTo(null);

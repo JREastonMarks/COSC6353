@@ -131,7 +131,7 @@ export default function Administrator() {
         firstName: '',
         middleInitial: '',
         sex: 'male',
-        birthdate: Date(),
+        birthdate: new Date(),
         cellPhone: '',
         workPhone: '',
         email: '',

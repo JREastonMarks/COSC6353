@@ -115,7 +115,7 @@ public class User implements Serializable {
 	public void setSex(Sex sex) {
 		this.sex = sex;
 	}
-	public Date getBirthDate() {
+	public Date getBirthdate() {
 		return birthdate;
 	}
 	public void setBirthdate(Date birthdate) {
