@@ -1,9 +1,31 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import { addDays } from "date-fns";
+import moment from 'moment';
+
+interface User {
+    id: string;
+    lastName: string;
+    firstName: string;
+    middleInitial: string;
+    sex: 'male' | 'female';
+    birthdate: Date;
+    cellPhone: number;
+    workPhone: number;
+    email: string;
+    password: string;
+    address: string;
+    address2: string;
+    city: string;
+    state: string[];
+    zipcode: string;
+    skills: string[];
+    preferences: string;
+    selectedDates: Date[];
+  }
 
 const skillOptions = [
     { value: "Database Management", label: "Database Management" },
@@ -82,13 +104,17 @@ const stateOptions = [
 export default function Administrator() {
     const [selectedSkillOptions, setSelectedSkillOptions] = useState<string[]>([])
     const handleSkillChange = (selectedSkillOptions: string[]) => {
+        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : [];
         if (selectedSkillOptions.length <= 3) {
+            setUser(prevState => ({ ...prevState, skills: selectedValues }));
             setSelectedSkillOptions(selectedSkillOptions);
         }
     };
 
     const [selectedStateOptions, setSelectedStateOptions] = useState<string[]>([])
     const handleStateChange = (selectedStateOptions: string[]) => {
+        const selectedValues = selectedStateOptions ? selectedStateOptions.map(option => option.value) : [];
+        setUser(prevState => ({ ...prevState, state: selectedValues }));
         setSelectedStateOptions(selectedStateOptions);
     };
 
@@ -98,6 +124,38 @@ export default function Administrator() {
         const slicedDates = filteredDates.slice(0, 5);
         setSelectedDates(slicedDates);
     };
+
+    const [user, setUser] = useState({
+        id: '',
+        lastName: '',
+        firstName: '',
+        middleInitial: '',
+        sex: 'male',
+        birthdate: Date(),
+        cellPhone: '',
+        workPhone: '',
+        email: '',
+        password: '',
+        address: '',
+        address2: '',
+        city: '',
+        state: [],
+        zipcode: '',
+        skills: [],
+        preferences: '',
+        selectedDates: [],
+    });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetch('/api/user/1');
+            const data = await response.json();
+
+            setUser(data);
+        };
+
+        fetchUser();
+    }, []);
 
     return (
         <div className="container mx-auto p-16">
@@ -113,7 +171,7 @@ export default function Administrator() {
                                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">E-Mail</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.email}></input>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +181,7 @@ export default function Administrator() {
                                     <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.password}></input>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +191,7 @@ export default function Administrator() {
                                     <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">First Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="firstName" name="firstName" placeholder="Enter you first name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Enter you first name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.firstName} required></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -141,7 +199,7 @@ export default function Administrator() {
                                     <label htmlFor="middleInitial" className="block text-sm font-medium leading-6 text-gray-900">Middle Initial</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.middleInitial}></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-3">
@@ -149,7 +207,7 @@ export default function Administrator() {
                                     <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="lastName" name="lastName" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Enter you last name" required></input>
+                                    <input type="text" id="lastName" name="lastName" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Enter you last name" value={user.lastName} required></input>
                                 </div>
                             </div>
                         </div>
@@ -159,16 +217,16 @@ export default function Administrator() {
                                     <label htmlFor="dob" className="block text-sm font-medium leading-6 text-gray-900">Date of Birth</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" id="dob" name="dob" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="date" id="dob" name="dob" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.birthdate} required></input>
                                 </div>
                             </div>
                         </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
                             <div className="sm:col-span-1">
                                 <div className="flex ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="radio" id="male" name="sex" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input type="radio" id="male" name="sex" checked={user.sex === 'male'} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
                                     <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">Male</label>
-                                    <input type="radio" id="female" name="sex" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input type="radio" id="female" name="sex" checked={user.sex === 'female'} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
                                     <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">Female</label>
                                 </div>
                             </div>
@@ -179,7 +237,7 @@ export default function Administrator() {
                                     <label htmlFor="cellPhone" className="block text-sm font-medium leading-6 text-gray-900">Cell Phone</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="cellPhone" name="cellPhone" placeholder="Enter you cell phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="cellPhone" name="cellPhone" placeholder="Enter you cell phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.cellPhone} required></input>
                                 </div>
                             </div>
                         </div>
@@ -189,7 +247,7 @@ export default function Administrator() {
                                     <label htmlFor="workPhone" className="block text-sm font-medium leading-6 text-gray-900">Work Phone</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="workPhone" name="workPhone" placeholder="Enter you work phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="workPhone" name="workPhone" placeholder="Enter you work phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.workPhone} required></input>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +258,7 @@ export default function Administrator() {
                                     <label htmlFor="address1" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address} required></input>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +268,7 @@ export default function Administrator() {
                                     <label htmlFor="address2" className="block text-sm font-medium leading-6 text-gray-900">Address 2</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address2} required></input>
                                 </div>
                             </div>
                         </div>
@@ -220,7 +278,7 @@ export default function Administrator() {
                                     <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">City</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.city} required></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -228,7 +286,7 @@ export default function Administrator() {
                                     <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">State</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select options={stateOptions} value={selectedStateOptions} onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required></Select>
+                                    <Select options={stateOptions} value={user.state.map(state => ({ value: state, label: state }))}  onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required></Select>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -236,7 +294,7 @@ export default function Administrator() {
                                     <label htmlFor="zipcode" className="block text-sm font-medium leading-6 text-gray-900">Zip Code</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required></input>
+                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" value={user.zipcode} required></input>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +304,7 @@ export default function Administrator() {
                                     <label htmlFor="skill" className="block text-sm font-medium leading-6 text-gray-900">Skills (Max 3)</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select options={skillOptions} value={selectedSkillOptions} onChange={handleSkillChange} id="skill" name="skill" className="block flex-1 text-gray-900 placeholder:text-gray-400" required></Select>
+                                    <Select options={skillOptions} value={user.skills.map(skill => ({ value: skill, label: skill }))}  onChange={handleSkillChange} id="skill" name="skill" className="block flex-1 text-gray-900 placeholder:text-gray-400" required></Select>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +314,7 @@ export default function Administrator() {
                                     <label htmlFor="preferences" className="block text-sm font-medium leading-6 text-gray-900">Preferences</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <textarea id="preferences" name="preferences" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></textarea>
+                                    <textarea id="preferences" name="preferences" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.preferences}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -266,11 +324,11 @@ export default function Administrator() {
                                     <label htmlFor="datePicker" className="block text-sm font-medium leading-6 text-gray-900">Availability</label>
                                 </div>
                                 <div className="flex ">
-                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="block flex-1 text-gray-900 placeholder:text-gray-400" />
+                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={user.selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="block flex-1 text-gray-900 placeholder:text-gray-400" />
                                 </div>
                                 <div className="mt-2">
-                                    <p>Selected Dates: {selectedDates.map(date => date.format("MM/DD/YYYY")).join(", ")}</p>
-                                    {selectedDates.length >= 5 && (
+                                    <p>Selected Dates: {user.selectedDates.map(date => moment(date).format("MM/DD/YYYY")).join(", ")}</p>
+                                    {user.selectedDates.length >= 5 && (
                                         <p>Maximum 5 dates can be selected!</p>
                                     )}
                                 </div>
