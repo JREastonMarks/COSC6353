@@ -1,7 +1,21 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
+
+interface Event{
+    id: string;
+    name: string;
+    desc: string;
+    address: string;
+    address2: string;
+    city: string;
+    state: string[];
+    zipcode: string;
+    skills: string[];
+    urgency: string[];
+    date: Date;
+}
 
 const urgencyOptions = [
     { value: "low", label: "Low" },
@@ -101,20 +115,50 @@ async function getData(id: number) {
 export default /*async*/ function Event({ params }: { params: { id: number } }) {
     //const event = await getData(params.id);
 
-    const [selectedSkillOptions, setSelectedSkillsOptoins] = useState ([])
-    const handleSkillChange = (selectedSkillOptions) => {
+    const [selectedSkillOptions, setSelectedSkillsOptoins] = useState<string[]> ([])
+    const handleSkillChange = (selectedSkillOptions: string[]) => {
+        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : [];
+        setEvent(prevState => ({...prevState, skills: selectedValues}));
         setSelectedSkillsOptoins(selectedSkillOptions);
     };
 
     const [selectedStateOptions, setSelectedStateOptions] = useState<string[]>([])
     const handleStateChange = (selectedStateOptions: string[]) => {
+        const selectedValues = selectedStateOptions ? selectedStateOptions.map(option => option.value) : [];
+        setEvent(prevState => ({...prevState, state: selectedValues}));
         setSelectedStateOptions(selectedStateOptions);
     };
 
     const [selectedUrgencyOptions, setSelectedUrgencyOptions] = useState<string[]>([])
     const handleUrgencyChange = (urgencyOptions: string[]) => {
+        const selectedValue = selectedUrgencyOptions ? selectedUrgencyOptions.map(option => option.value): [];
+        setEvent(prevState => ({...prevState, urgency: selectedValue}));
         setSelectedUrgencyOptions(urgencyOptions);
     };
+
+    const [event, setEvent] = useState({
+        id:'',
+        name:'',
+        desc:'',
+        address:'',
+        address2:'',
+        city:'',
+        state: [],
+        zipcode:'',
+        skills:[],
+        urgency:[],
+        date: new Date()
+    });
+
+    useEffect(()=>{
+        const fetchEvent = async () => {
+            const response = await fetch('/api/event/1');
+            const data = await response.json();
+
+            setEvent(data);
+        };
+        fetchEvent();
+    }, []);
     
     return (
         <div className="container mx-auto p-16">
@@ -130,7 +174,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventName" className="block text-sm font-medium leading-6 text-gray-900">Event Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="eventName" name="eventName" type="text" placeholder="Event Name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input id="eventName" name="eventName" type="text" placeholder="Event Name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.name}></input>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +184,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventDescription" className="block text-sm font-medium leading-6 text-gray-900">Event Description</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <textarea id="eventDescription" name="eventDescription" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></textarea>
+                                    <textarea id="eventDescription" name="eventDescription" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.desc}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +194,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="address1" className="block text-sm font-medium leading-6 text-gray-900">Event Address</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address}></input>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +204,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="address2" className="block text-sm font-medium leading-6 text-gray-900">Event Address 2</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address2}></input>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +214,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">Event City</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.city}></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -178,7 +222,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">Event State</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select options={stateOptions} value={selectedStateOptions} onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required></Select>
+                                    <Select options={stateOptions} value={event.state.map(state => ({value: state, label: state}))} onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required ></Select>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -186,7 +230,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="zipcode" className="block text-sm font-medium leading-6 text-gray-900">Event Zip Code</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required></input>
+                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required value={event.zipcode}></input>
                                 </div>
                             </div>
                         </div>
@@ -196,7 +240,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="requiredSkills" className="block text-sm font-medium leading-6 text-gray-900">Required Skills</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select required options={skillOptions} value={selectedSkillOptions} onChange={handleSkillChange} name="requiredSkills" id="requiredSkills" isMulti={true} className="text-gray-900 placeholder:text-gray-400" />
+                                    <Select required options={skillOptions} value={event.skills.map(skill => ({value:skill, label: skill}))} onChange={handleSkillChange} name="requiredSkills" id="requiredSkills" isMulti={true} className="text-gray-900 placeholder:text-gray-400" />
                                 </div>
                             </div>
                         </div>
@@ -206,7 +250,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="urgency" className="block text-sm font-medium leading-6 text-gray-900">Urgency</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select id="urgency" name="urgency" required options={urgencyOptions} value={selectedUrgencyOptions} onChange={handleUrgencyChange} isMulti={false} className="text-gray-900 placeholder:text-gray-400" />
+                                    <Select id="urgency" name="urgency" required options={urgencyOptions} value={event.urgency.map(urgency => ({value:urgency, label:urgency}))} onChange={handleUrgencyChange} isMulti={false} className="text-gray-900 placeholder:text-gray-400" />
                                 </div>
                             </div>
                         </div>
@@ -216,7 +260,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventDate" className="block text-sm font-medium leading-6 text-gray-900">Date</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" id="eventDate" name="eventDate" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required></input>
+                                    <input type="date" id="eventDate" name="eventDate" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.date}></input>
                                 </div>
                             </div>
                         </div>
