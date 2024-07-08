@@ -1,9 +1,8 @@
 package edu.uh.nsm.cosc.eventmanager.repository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.time.Instant;
 
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,7 @@ public class UserRepository {
         user.setMiddleInitial("i");
         user.setEmail("test@eventmanager.org");
         user.setPassword("testpass");
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date birthdate = dateFormat.parse("2005-05-05");
-            user.setBirthdate(birthdate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        user.setBirthdate(Date.from(Instant.now()));
         user.setCellPhone("555-555-5555");
         user.setWorkPhone("222-222-2222");
         user.setSex(Sex.female);
