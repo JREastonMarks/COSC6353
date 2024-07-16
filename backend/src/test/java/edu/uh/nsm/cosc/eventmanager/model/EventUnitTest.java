@@ -1,12 +1,12 @@
 package edu.uh.nsm.cosc.eventmanager.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,13 +29,13 @@ public class EventUnitTest{
         event.setName("Event Name");
         event.setDesc("Event Desc");
         event.setAddress("505 Main St");
-        event.setAddress2(null)
+        event.setAddress2(null);
         event.setCity("Houston");
         event.setState(Arrays.asList("Texas"));
         event.setZipcode("12345");
         event.setSkills(Arrays.asList("Budgeting"));
         event.setUrgency(Arrays.asList("Low"));
-        event.setDate(df.parseObject("2024-07-04"));
+        event.setDate((Date) df.parseObject("2024-07-04"));
 
         assertThat(event.getId()).isEqualTo(1L);
         assertThat(event.getName()).isEqualTo("Event 1");
@@ -56,7 +56,7 @@ public class EventUnitTest{
         event.setId(1L);
         event.setName("");
 
-        Set<ConstraintViolation<Event>> violations = validator.vaidate(event);
+        Set<ConstraintViolation<Event>> violations = validator.validate(event);
 
         assertThat(violations.size()).isGreaterThan(0);
     }

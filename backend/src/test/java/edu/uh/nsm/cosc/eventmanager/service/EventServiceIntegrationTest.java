@@ -1,9 +1,8 @@
-package edu.uh.nsm.cosc.eventmanager.repository;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package edu.uh.nsm.cosc.eventmanager.service;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,28 +10,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 
 @SpringBootTest
-pubilc class EventRepositoryIntegrationTest{
+public class EventServiceIntegrationTest{
     
     @Autowired
-    private EventRepository eventRepository;
-    
+    private EventService eventService;
+
     @Test
     void contextLoads() throws Exception{
-        assertThat(eventRepository).isNotNull();
+        assertThat(eventService).isNotNull();
     }
 
     @Test
     void testEvents(){
-        List<Event> events = eventRepository.findAll();
-        
+        List<Event> events = eventService.getEvents();
+
         assertThat(events.size()).isEqualTo(1);
     }
 
     @Test
     void testEvent(){
-        Event events = eventRepository.findEventById(1L);
+        Event event = eventService.getEvent(1L);
 
-        assertThat(events.getId()).isEqualTo(1L);
-
+        assertThat(event.getId()).isEqualTo(1L);
     }
 }

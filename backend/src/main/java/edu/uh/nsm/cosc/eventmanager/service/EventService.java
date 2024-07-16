@@ -19,7 +19,7 @@ public class EventService{
         return eventRepository.findAll();
     }
 
-    public Event getEvent(long evnetId){
-        return eventRepository.findEventById(evnetId)
+    public Event getEvent(long eventId){
+        return eventRepository.findEventById(eventId);
     }
 }

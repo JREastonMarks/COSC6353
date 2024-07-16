@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.uh.springframework.model.Event;
-import edu.uh.springframework.service.EventService;
+import edu.uh.nsm.cosc.eventmanager.model.Event;
+import edu.uh.nsm.cosc.eventmanager.service.EventService;
 
 @RestController
 public class EventController{
@@ -19,7 +19,7 @@ public class EventController{
 
     @GetMapping(path="/events")
     List<Event> messages(){
-        return eventService.getEvent();
+        return eventService.getEvents();
     }
 
     @GetMapping(path="/event/{eventId}")

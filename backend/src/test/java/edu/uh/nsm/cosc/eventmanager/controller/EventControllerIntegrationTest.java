@@ -1,21 +1,20 @@
-package static edu.uh.nsm.cosc.eventmanager.controller;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+package edu.uh.nsm.cosc.eventmanager.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.service.EventService;
@@ -47,6 +46,6 @@ public class EventControllerIntegrationTest {
         event.setName("Event 1");
 
         when(eventService.getEvent(1L)).thenReturn(event);
-        this.mockMvc.perform(get("/event/1")).andDo(print())and.andExpect(status().isOK()).andExpect(content().string(containsString("Event 1"))).andExpect(content().string(containsString("1")));
+        this.mockMvc.perform(get("/event/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Event 1"))).andExpect(content().string(containsString("1")));
     }
 }
