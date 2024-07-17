@@ -18,9 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.uh.nsm.cosc.eventmanager.model.History;
-import edu.uh.nsm.cosc.eventmanager.model.Notification;
 import edu.uh.nsm.cosc.eventmanager.service.HistoryService;
-import edu.uh.nsm.cosc.eventmanager.service.NotificationService;
 
 @WebMvcTest(controllers=HistoryController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class HistoryControllerIntegrationTest {
