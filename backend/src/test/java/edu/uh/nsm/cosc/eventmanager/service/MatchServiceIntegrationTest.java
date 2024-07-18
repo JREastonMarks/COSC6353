@@ -2,8 +2,6 @@ package edu.uh.nsm.cosc.eventmanager.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,15 +19,8 @@ public class MatchServiceIntegrationTest {
     }
 
     @Test
-    void testMatches(){
-        List<Match> matches = matchService.getMatchByEvent(Event event);
-
-        assertThat(matches.size()).isEqualTo(1);
-    }
-
-    @Test
     void testMatch(){
-        Match match = matchService.getMatchBySkill(String skill);
+        Match match = matchService.getMatch("Database Management");
 
         assertThat(match.getMatch()).isEqualTo(true);
     }
