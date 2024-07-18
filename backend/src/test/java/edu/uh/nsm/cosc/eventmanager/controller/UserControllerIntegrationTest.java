@@ -35,6 +35,6 @@ public class UserControllerIntegrationTest {
 		
 		when(userService.getUser(1L)).thenReturn(user);
 		
-		this.mockMvc.perform(get("/user/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("First Name"))).andExpect(content().string(containsString("Name")));
+		this.mockMvc.perform(get("/api/user/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("First Name"))).andExpect(content().string(containsString("Name")));
 	}
 }
