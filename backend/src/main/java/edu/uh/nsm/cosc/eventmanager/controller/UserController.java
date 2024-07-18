@@ -2,6 +2,7 @@ package edu.uh.nsm.cosc.eventmanager.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.uh.nsm.cosc.eventmanager.model.User;
@@ -9,6 +10,7 @@ import edu.uh.nsm.cosc.eventmanager.service.UserService;
 
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     private UserService userService;
 	

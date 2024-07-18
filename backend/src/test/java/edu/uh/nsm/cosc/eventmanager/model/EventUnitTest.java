@@ -38,7 +38,7 @@ public class EventUnitTest{
         event.setDate((Date) df.parseObject("2024-07-04"));
 
         assertThat(event.getId()).isEqualTo(1L);
-        assertThat(event.getName()).isEqualTo("Event 1");
+        assertThat(event.getName()).isEqualTo("Event Name");
         assertThat(event.getDesc()).isEqualTo("Event Desc");
         assertThat(event.getAddress()).isEqualTo("505 Main St");
         assertThat(event.getAddress2()).isEqualTo(null);
