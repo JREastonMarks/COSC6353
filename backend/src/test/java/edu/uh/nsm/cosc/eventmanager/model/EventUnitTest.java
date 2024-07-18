@@ -26,7 +26,7 @@ public class EventUnitTest{
 
         Event event = new Event();
         event.setId(1L);
-        event.setName("Event 1");
+        event.setName("Event Name");
         event.setDesc("Event Desc");
         event.setAddress("505 Main St");
         event.setAddress2(null);

@@ -36,7 +36,7 @@ public class EventControllerIntegrationTest {
 
         when(eventService.getEvents()).thenReturn(events);
 
-        this.mockMvc.perform(get("/events")).andDo(print()).andExpect(content().string(containsString("Event 1")));
+        this.mockMvc.perform(get("/api/events")).andDo(print()).andExpect(content().string(containsString("Event 1")));
     }
     
     @Test
@@ -46,6 +46,6 @@ public class EventControllerIntegrationTest {
         event.setName("Event 1");
 
         when(eventService.getEvent(1L)).thenReturn(event);
-        this.mockMvc.perform(get("/event/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Event 1"))).andExpect(content().string(containsString("1")));
+        this.mockMvc.perform(get("/api/event/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Event 1"))).andExpect(content().string(containsString("1")));
     }
 }

@@ -38,7 +38,7 @@ public class NotificationControllerIntegrationTest {
 		
 		when(notificationService.getNotifications()).thenReturn(notifications);
 		
-		this.mockMvc.perform(get("/notifications")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1")));
+		this.mockMvc.perform(get("/api/notifications")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1")));
 	}
 	
 	@Test
@@ -49,6 +49,6 @@ public class NotificationControllerIntegrationTest {
 		
 		when(notificationService.getNotification(1L)).thenReturn(notification);
 		
-		this.mockMvc.perform(get("/notification/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1"))).andExpect(content().string(containsString("1")));
+		this.mockMvc.perform(get("/api/notification/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Message 1"))).andExpect(content().string(containsString("1")));
 	}
 }

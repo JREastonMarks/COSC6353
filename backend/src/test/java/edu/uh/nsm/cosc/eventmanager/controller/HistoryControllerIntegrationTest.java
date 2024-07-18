@@ -37,7 +37,7 @@ public class HistoryControllerIntegrationTest {
 		
 		when(historyService.getHistories()).thenReturn(histories);
 		
-		this.mockMvc.perform(get("/histories")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("is Pending")));
+		this.mockMvc.perform(get("/api/histories")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("is Pending")));
 	}
 	
 	@Test
@@ -48,6 +48,6 @@ public class HistoryControllerIntegrationTest {
 		
 		when(historyService.getHistory(1L)).thenReturn(history);
 		
-		this.mockMvc.perform(get("/history/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("is Pending"))).andExpect(content().string(containsString("is")));
+		this.mockMvc.perform(get("/api/history/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("is Pending"))).andExpect(content().string(containsString("is")));
 	}
 }
