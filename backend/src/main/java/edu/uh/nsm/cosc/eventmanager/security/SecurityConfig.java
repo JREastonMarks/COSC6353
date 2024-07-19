@@ -26,7 +26,7 @@ public class SecurityConfig {
 			.httpBasic(Customizer.withDefaults())
 			.formLogin(form -> form
 					.loginPage("/login")
-					.defaultSuccessUrl("/administratorNotifications")
+					.defaultSuccessUrl("/administratorNotifications", true)
 					.loginProcessingUrl("/api/login")
 					.failureUrl("/login?error")
 			).csrf((csrf) -> csrf.disable())
