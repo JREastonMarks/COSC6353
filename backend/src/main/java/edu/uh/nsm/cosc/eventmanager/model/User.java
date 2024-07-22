@@ -1,16 +1,27 @@
 package edu.uh.nsm.cosc.eventmanager.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@Entity
 public class User implements Serializable {
 	private static final long serialVersionUID = 8455135942008217481L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
 	
 	@Size(min=1, max=255, message="First name must be greater than 1 and less than 255 characters")
@@ -58,10 +69,10 @@ public class User implements Serializable {
 	@NotNull(message="Sex must not be null")
 	Sex sex;
 
-	String password;
-
 	@Email
-	String email;
+	String username;
+	
+	String password;
 
 	public enum Sex {
 		male, female
@@ -102,12 +113,6 @@ public class User implements Serializable {
 	}
 	public void setWorkPhone(String workPhone) {
 		this.workPhone = workPhone;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public Sex getSex() {
 		return sex;
@@ -174,5 +179,11 @@ public class User implements Serializable {
 	}
 	public void setPassword(String password){
 		this.password = password;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

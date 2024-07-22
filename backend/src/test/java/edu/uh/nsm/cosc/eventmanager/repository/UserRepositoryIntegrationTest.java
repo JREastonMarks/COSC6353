@@ -21,7 +21,7 @@ public class UserRepositoryIntegrationTest {
 
 	@Test
 	void testNotification() {
-		User user = userRepository.userInformationById(1L);
+		User user = userRepository.getReferenceById(1L);
 		
 		assertThat(user.getId()).isEqualTo(1L);
 	}

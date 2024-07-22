@@ -47,7 +47,7 @@ public class UserUnitTest {
         user.setSelectedDates(Arrays.asList(
             "2025-07-01", "2025-07-02", "2025-07-03", "2025-07-04", "2025-07-05"
         ));
-		user.setEmail("test@eventmanager.org");
+		user.setUsername("test@eventmanager.org");
 		user.setPassword("testpass");
 		
 		assertThat(user.getId()).isEqualTo(1L);
@@ -68,7 +68,7 @@ public class UserUnitTest {
         ));
 		assertThat(user.getCellPhone()).isEqualTo("555-555-5555");
 		assertThat(user.getWorkPhone()).isEqualTo("222-222-2222");
-		assertThat(user.getEmail()).isEqualTo("test@eventmanager.org");
+		assertThat(user.getUsername()).isEqualTo("test@eventmanager.org");
 		assertThat(user.getPassword()).isEqualTo("testpass");
 	}
 	

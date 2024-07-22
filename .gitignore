@@ -5,6 +5,7 @@ frontend/package-lock.json
 backend/target/classes/META-INF/MANIFEST.MF
 backend/.settings/
 backend/.settings/.classpath
+backend/.dbeaver/
 backend/target/
 backend/.classpath
 .vscode/settings.json

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,4 +29,10 @@ public class NotificationController {
 	Notification message(@PathVariable(required=true) long notificationId) {
 		return notificationService.getNotification(notificationId);
 	}
+	
+	@PostMapping(path="/notification")
+	void createNotification(Notification notification) {
+		notificationService.createNotification(notification);
+	}
+	
 }

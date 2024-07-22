@@ -21,7 +21,13 @@ public class NotificationService {
 	}
 
 	public Notification getNotification(long notificationId) {
-		return notificationRepository.findNotificationById(notificationId);
+		return notificationRepository.getReferenceById(notificationId);
+	}
+
+
+	public void createNotification(Notification notification) {
+		notificationRepository.save(notification);
+		
 	}
 
 }

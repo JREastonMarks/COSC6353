@@ -3,13 +3,26 @@ package edu.uh.nsm.cosc.eventmanager.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Size;
 
+
+@Entity
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 4079829834776529782L;
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
+	
+	@ManyToOne
 	User receiver;
+	
+	@ManyToOne
 	User sender;
 	
 	@Size(min=1, max=255, message="Tiltle must be greater than 1 and less than 255 characters")
