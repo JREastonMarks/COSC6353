@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.model.Match;
 import edu.uh.nsm.cosc.eventmanager.repository.MatchRepository;
 
@@ -16,11 +15,15 @@ public class MatchService {
         this.matchRepository = matchRepository;
     }
 
-    public List<Match> getMatchByEvent(Event event){
-        return matchRepository.findAllByEvent(event);
+    public List<Match> getMatches(){
+        return matchRepository.findAll();
     }
 
-    public Match getMatch(String skill){
-        return matchRepository.matchBySkill(skill);
+    public Match getMatch(long matchId){
+        return matchRepository.getReferenceById(matchId);
+    }
+
+    public void createMatch(Match match){
+        matchRepository.save(match);
     }
 }

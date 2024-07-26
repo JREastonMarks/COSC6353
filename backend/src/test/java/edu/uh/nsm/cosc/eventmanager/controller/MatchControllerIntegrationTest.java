@@ -41,8 +41,8 @@ public class MatchControllerIntegrationTest {
         match.setId(1L);
         match.setMatch(volunteer.getSkills(), event.getSkills());
 
-        when(matchService.getMatch("Database Management")).thenReturn(match);
+        when(matchService.getMatch(1L)).thenReturn(match);
 
-        this.mockMvc.perform(get("/api/match/Database Management")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("true"))).andExpect(content().string(containsString("1")));
+        this.mockMvc.perform(get("/api/match/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("1")));
     }
 }

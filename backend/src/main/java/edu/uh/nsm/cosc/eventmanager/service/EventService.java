@@ -20,6 +20,10 @@ public class EventService{
     }
 
     public Event getEvent(long eventId){
-        return eventRepository.findEventById(eventId);
+        return eventRepository.getReferenceById(eventId);
+    }
+
+    public void createEvent(Event event){
+        eventRepository.save(event);
     }
 }

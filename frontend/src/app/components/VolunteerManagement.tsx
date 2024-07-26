@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 interface MatchProps{
+    
     volunteer: User;
     event: Event;
     match: boolean;
@@ -24,11 +25,11 @@ interface Event{
     address: string;
     address2: string;
     city: string;
-    state: string[];
+    state: {code:string, state:string} | null;
     zipcode: string;
     skills: string[];
     urgency: string[];
-    date: Date;
+    date: string;
 }
 
 const Match: React.FC<MatchProps> = ({volunteer, event, match}) => {
@@ -42,13 +43,13 @@ const Match: React.FC<MatchProps> = ({volunteer, event, match}) => {
                     <div className="sm:col-span-1 font-bold text-right">
                         Volunteer:
                     </div>
-                    <div className="sm:col-span-2">{volunteer.firstName} {volunteer.middleInitial} {volunteer.lastName}</div>
+                    <div className="sm:col-span-2">{volunteer.firstName} {volunteer.middleInitial} {volunteer.lastName} {volunteer.skills.join(', ')}</div>
                 </div>
                 <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-1 font-bold text-left">
                         Event: 
                     </div>
-                    <div className="sm:col-span-2">{event.name}</div>
+                    <div className="sm:col-span-2">{event.name}  {event.skills.join(', ')}</div>
                 </div>
                 <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-1 font-bold text-left">
@@ -61,19 +62,72 @@ const Match: React.FC<MatchProps> = ({volunteer, event, match}) => {
     );
 };
 
-
-
 export default function VolunteerMatching(){
 
-    /*const [selectedSkillOptions, setSelectedSkillsOptoins] = useState<string[]> ([])
-    const handleSkillChange = (selectedSkillOptions: string[]) => {
-        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.valueOf) : [];
-        setMatches(prevState => ({...prevState, skills: selectedValues}));
-        setSelectedSkillsOptoins(selectedSkillOptions);
-    };*/
-    const [matches, setMatches] = useState<MatchProps[]>([]);
-    const [users, setUsers] = useState<User[]>([]);
-    const [events, setEvents] = useState<Event[]>([]);
+    const saveMatchData = async (updateMatch: MatchProps) => {
+        try{
+            await fetch(`/api/isers/${matches}`, {
+                method:'PUT',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify(updateMatch),
+            });
+        } catch (error){
+            console.error("Error updating match data: ", error);
+        }
+    }
+
+    const [matches, setMatches] = useState<MatchProps[]>([
+    {
+        volunteer: {
+            id: '',
+            lastName:'',
+            firstName:'',
+            middleInitial:'',
+            skills:[]
+        },
+
+        event:{
+            id: '',
+            name: '',
+            desc: '',
+            address: '',
+            address2: '',
+            city: '',
+            state: null,
+            zipcode: '',
+            skills: [],
+            urgency: [],
+            date: ''
+        },
+
+        match: false
+    }
+    ]);
+    const [users, setUsers] = useState<User>(
+            {id: '',
+            lastName:'',
+            firstName:'',
+            middleInitial:'',
+            skills:[]
+            }
+    );
+    const [events, setEvents] = useState<Event[]>([
+        {
+            id: '',
+            name: '',
+            desc: '',
+            address: '',
+            address2: '',
+            city: '',
+            state: null,
+            zipcode: '',
+            skills: [],
+            urgency: [],
+            date: ''
+        }
+    ]);
 
     useEffect(() => {
         const fetchMatches = async () => {
@@ -83,9 +137,7 @@ export default function VolunteerMatching(){
         };
 
         fetchMatches();
-    }, []);
 
-    useEffect(() => {
         const fetchUser = async () => {
             const response = await fetch('api/users');
             const data = await response.json();
@@ -94,9 +146,7 @@ export default function VolunteerMatching(){
         };
 
         fetchUser();
-    }, []);
-
-    useEffect(() => {
+    
         const fetchEvent = async () => {
             const response = await fetch('api/events');
             const data = await response.json();
@@ -133,7 +183,7 @@ export default function VolunteerMatching(){
                     )}
                 </div>
                 <div className="mb-4 w-full">
-                    <button type="submit" className="bg-black text-white py-2 px-4 rounded">Match</button>
+                    <button type="submit" className="bg-black text-white py-2 px-4 rounded" onClick={saveMatchData}>Match</button>
                 </div>
             </div>
         </div>

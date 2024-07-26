@@ -31,11 +31,13 @@ public class EventUnitTest{
         event.setAddress("505 Main St");
         event.setAddress2(null);
         event.setCity("Houston");
-        event.setState(Arrays.asList("Texas"));
         event.setZipcode("12345");
         event.setSkills(Arrays.asList("Budgeting"));
         event.setUrgency(Arrays.asList("Low"));
         event.setDate((Date) df.parseObject("2024-07-04"));
+        States state = new States();
+        state.setCode("TX");
+        state.setState("Texas");
 
         assertThat(event.getId()).isEqualTo(1L);
         assertThat(event.getName()).isEqualTo("Event Name");
@@ -43,7 +45,8 @@ public class EventUnitTest{
         assertThat(event.getAddress()).isEqualTo("505 Main St");
         assertThat(event.getAddress2()).isEqualTo(null);
         assertThat(event.getCity()).isEqualTo("Houston");
-        assertThat(event.getState()).isEqualTo(Arrays.asList("Texas"));
+        assertThat(event.getState().getCode()).isEqualTo("TX");
+        assertThat(event.getState().getState()).isEqualTo("Texas");
         assertThat(event.getZipcode()).isEqualTo("12345");
         assertThat(event.getSkills()).isEqualTo(Arrays.asList("Budgeting"));
         assertThat(event.getUrgency()).isEqualTo(Arrays.asList("Low"));

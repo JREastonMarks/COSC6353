@@ -4,12 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Event implements Serializable{
     private static final long serialVersionUID=123456789;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
     @Size(min=1, max=100, message="Event name must be greater than one and less than 100")
@@ -27,8 +36,9 @@ public class Event implements Serializable{
     @Size(min=1, max=100, message="City must be greater than one and less than 100")
     String city;
 
-    @Size(min=1, max=1, message="Must select a state")
-    List<String> state;
+    @ManyToOne
+    @JoinColumn(name = "state", referencedColumnName="code")
+    States state;
 
     @Size(min=5, max=9, message="Zipcode must be between 5 and 9")
     String zipcode;
@@ -90,11 +100,11 @@ public class Event implements Serializable{
         this.city=city;
     }
 
-    public List<String> getState(){
+    public States getState(){
         return state;
     }
 
-    public void setState(List<String> state){
+    public void setState(States state){
         this.state=state;
     }
 

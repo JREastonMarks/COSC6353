@@ -8,6 +8,11 @@ interface HistoryProps {
     status: string;
 }
 
+interface StateOption{
+    code:string;
+    state:string;
+}
+
 interface User {
     id: string;
     lastName: string;
@@ -21,7 +26,7 @@ interface Event {
     address: string;
     address2: string;
     city: string;
-    state: string[];
+    state: {code:string, state:string} | null;
     zipcode: string;
     skills: string[];
     urgency: string[];
@@ -100,7 +105,7 @@ export default function VolunteerHistory(){
             address: '',
             address2: '',
             city: '',
-            state: [],
+            state: null,
             zipcode: '',
             skills: [],
             urgency: [],
@@ -125,7 +130,7 @@ export default function VolunteerHistory(){
         address:'',
         address2:'',
         city:'',
-        state: [],
+        state: null,
         zipcode:'',
         skills:[],
         urgency:[],
@@ -142,9 +147,7 @@ export default function VolunteerHistory(){
         };
     
         fetchHistories();
-      }, []);
-    
-    useEffect(() => {
+      
         const fetchUser = async () => {
             const response = await fetch('/api/user/1');
             const data = await response.json();
@@ -153,9 +156,7 @@ export default function VolunteerHistory(){
         };
 
         fetchUser();
-    }, []);
-
-    useEffect(() => {
+    
         const fetchEvent = async () => {
             const response = await fetch('/api/event/1');
             const data = await response.json();

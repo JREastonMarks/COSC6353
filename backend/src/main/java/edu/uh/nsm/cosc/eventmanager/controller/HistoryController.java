@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.uh.nsm.cosc.eventmanager.model.History;
 import edu.uh.nsm.cosc.eventmanager.service.HistoryService;
-
 
 @RestController
 @RequestMapping("/api")
@@ -30,4 +30,8 @@ public class HistoryController {
         return historyService.getHistory(historyId);
     }
     
+    @PostMapping
+    void createHistory(History history){
+        historyService.createHistory(history);
+    }
 }

@@ -20,6 +20,10 @@ public class HistoryService {
     }
     
     public History getHistory(long historyId) {
-        return historyRepository.findHistoryById(historyId);
+        return historyRepository.getReferenceById(historyId);
+    }
+
+    public void createHistory(History history){
+        historyRepository.save(history);
     }
 }
