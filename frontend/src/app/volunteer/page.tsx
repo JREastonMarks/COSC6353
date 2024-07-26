@@ -54,99 +54,72 @@ const skillOptions = [
 ];
 
 export default function Volunteer() {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type, checked } = e.target;
+        
+        setUser(prevState => ({
+            ...prevState,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+    
     const [selectedSkillOptions, setSelectedSkillOptions] = useState<{ value: string; label: string }[] | null>(null);
     const handleSkillChange = (selectedSkillOptions: { value: string; label: string }[] | null) => {
         if (selectedSkillOptions && selectedSkillOptions.length > 3) {
-            // Limit the number of selected skills to 3
             selectedSkillOptions = selectedSkillOptions.slice(0, 3);
             alert("You can select a maximum of 3 skills.");
         }
-    
         const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : null;
         setSelectedSkillOptions(selectedSkillOptions);
         setUser(prevState => ({ ...prevState, skills: selectedValues }));
-    
-        try {
-            // Make API call to update the user resource
-            fetch(`/api/user/${user.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...user,
-                    skills: selectedValues,
-                }),
-            });
-        } catch (error) {
-            console.error("Error updating user skills:", error);
-        }
+        saveUserData({ ...user, skills: selectedValues });
     };
-    
-
+   
     const [selectedStateOption, setSelectedStateOption] = useState<{ value: string; label: string } | null>(null);
     const [stateOptions, setStateOptions] = useState<{ value: string; label: string }[]>([]);
     const handleStateChange = async (selectedStateOption: { value: string; label: string } | null) => {
         let state = null;
-    
         if (selectedStateOption) {
             state = { code: selectedStateOption.value, state: selectedStateOption.label };
             setSelectedStateOption(selectedStateOption);
         } else {
             setSelectedStateOption(null);
         }
-    
-        // Update local state
         setUser(prevState => ({ ...prevState, state }));
-    
-        try {
-            // Make API call to update the user resource
-            await fetch(`/api/user/${user.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...user,
-                    state,
-                }),
-            });
-    
-        } catch (error) {
-            // Handle errors
-            console.error("Error updating user state:", error);
-        }
+        saveUserData({ ...user, state });
     };
-    
 
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
     const handleDateChange = async (dates: Date[]) => {
-        // Filter out past dates and limit to 5 dates
         const filteredDates = dates.filter(date => date >= addDays(new Date(), 0));
         const slicedDates = filteredDates.slice(0, 5);
-    
-        // Update local state
         setSelectedDates(slicedDates);
         setUser(prevState => ({ ...prevState, selectedDates: slicedDates }));
-    
+        saveUserData({ ...user, selectedDates: slicedDates });
+    };
+
+    // Handle change for sex radio buttons
+    const handleSexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setUser(prevState => ({ ...prevState, sex: value as 'male' | 'female' }));
+        saveUserData({ ...user, sex: value as 'male' | 'female' });
+    };
+
+    // Save user data to the backend
+    const saveUserData = async (updatedUser: User) => {
         try {
-            // Make API call to update the user resource
             await fetch(`/api/user/${user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    ...user,
-                    selectedDates: slicedDates,
-                }),
+                body: JSON.stringify(updatedUser),
             });
-    
         } catch (error) {
-            // Handle errors
-            console.error("Error updating user selected dates:", error);
+            console.error("Error updating user data:", error);
         }
     };
+    
     
 
     const [user, setUser] = useState<User>({
@@ -201,7 +174,7 @@ export default function Volunteer() {
                                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">E-Mail</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.email}></input>
+                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.email} onChange={handleInputChange} minLength={6} maxLength={50}></input>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +184,7 @@ export default function Volunteer() {
                                     <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.password}></input>
+                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.password} onChange={handleInputChange} minLength={6} maxLength={50}></input>
                                 </div>
                             </div>
                         </div>
@@ -221,7 +194,7 @@ export default function Volunteer() {
                                     <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">First Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="firstName" name="firstName" placeholder="Enter you first name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.firstName} required></input>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Enter you first name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.firstName} onChange={handleInputChange} minLength={1} maxLength={24} required></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -229,7 +202,7 @@ export default function Volunteer() {
                                     <label htmlFor="middleInitial" className="block text-sm font-medium leading-6 text-gray-900">Middle Initial</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.middleInitial}></input>
+                                    <input type="text" id="middleInitial" name="middleInitial" placeholder="Middle Initial" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.middleInitial} onChange={handleInputChange}></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-3">
@@ -237,7 +210,7 @@ export default function Volunteer() {
                                     <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="lastName" name="lastName" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Enter you last name" value={user.lastName} required></input>
+                                    <input type="text" id="lastName" name="lastName" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Enter you last name" value={user.lastName} onChange={handleInputChange} minLength={1} maxLength={24} required></input>
                                 </div>
                             </div>
                         </div>
@@ -247,16 +220,40 @@ export default function Volunteer() {
                                     <label htmlFor="dob" className="block text-sm font-medium leading-6 text-gray-900">Date of Birth</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" id="dob" name="dob" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.birthdate} required></input>
+                                    <input
+                                        type="date"
+                                        id="dob"
+                                        name="birthdate"
+                                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                        value={moment(user.birthdate).format('MM-DD-YYYY')}
+                                        onChange={handleInputChange}
+                                        required
+                                    />                                
                                 </div>
                             </div>
                         </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
                             <div className="sm:col-span-1">
                                 <div className="flex ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="radio" id="male" name="sex" checked={user.sex === 'male'} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input
+                                        type="radio"
+                                        id="male"
+                                        name="sex"
+                                        value="male"
+                                        checked={user.sex === 'male'}
+                                        className="border-0 bg-transparent text-indigo-600 focus:ring-0"
+                                        onChange={handleSexChange}
+                                    />                                    
                                     <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">Male</label>
-                                    <input type="radio" id="female" name="sex" checked={user.sex === 'female'} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"></input>
+                                    <input
+                                        type="radio"
+                                        id="female"
+                                        name="sex"
+                                        value="female"
+                                        checked={user.sex === 'female'}
+                                        className="border-0 bg-transparent text-indigo-600 focus:ring-0"
+                                        onChange={handleSexChange}
+                                    />                                        
                                     <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">Female</label>
                                 </div>
                             </div>
@@ -267,7 +264,7 @@ export default function Volunteer() {
                                     <label htmlFor="cellPhone" className="block text-sm font-medium leading-6 text-gray-900">Cell Phone</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="cellPhone" name="cellPhone" placeholder="Enter you cell phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.cellPhone} required></input>
+                                    <input type="text" id="cellPhone" name="cellPhone" placeholder="Enter you cell phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.cellPhone} onChange={handleInputChange} minLength={10} maxLength={15} required></input>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +274,7 @@ export default function Volunteer() {
                                     <label htmlFor="workPhone" className="block text-sm font-medium leading-6 text-gray-900">Work Phone</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="workPhone" name="workPhone" placeholder="Enter you work phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.workPhone} required></input>
+                                    <input type="text" id="workPhone" name="workPhone" placeholder="Enter you work phone" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.workPhone} onChange={handleInputChange} minLength={10} maxLength={15} required></input>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +285,7 @@ export default function Volunteer() {
                                     <label htmlFor="address1" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address} required></input>
+                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address} onChange={handleInputChange} minLength={5} maxLength={100} required></input>
                                 </div>
                             </div>
                         </div>
@@ -298,7 +295,7 @@ export default function Volunteer() {
                                     <label htmlFor="address2" className="block text-sm font-medium leading-6 text-gray-900">Address 2</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address2} required></input>
+                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.address2} onChange={handleInputChange} minLength={5} maxLength={100}></input>
                                 </div>
                             </div>
                         </div>
@@ -308,7 +305,7 @@ export default function Volunteer() {
                                     <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">City</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.city} required></input>
+                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.city} onChange={handleInputChange} minLength={1} maxLength={100} required></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -330,7 +327,7 @@ export default function Volunteer() {
                                     <label htmlFor="zipcode" className="block text-sm font-medium leading-6 text-gray-900">Zip Code</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" value={user.zipcode} required></input>
+                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" value={user.zipcode} onChange={handleInputChange} minLength={5} maxLength={9} required></input>
                                 </div>
                             </div>
                         </div>
@@ -358,7 +355,7 @@ export default function Volunteer() {
                                     <label htmlFor="preferences" className="block text-sm font-medium leading-6 text-gray-900">Preferences</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <textarea id="preferences" name="preferences" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.preferences}></textarea>
+                                    <textarea id="preferences" name="preferences" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.preferences} onChange={handleInputChange} minLength={0} maxLength={255}></textarea>
                                 </div>
                             </div>
                         </div>
