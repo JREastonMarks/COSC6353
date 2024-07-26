@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import edu.uh.nsm.cosc.eventmanager.model.constraint.ValidRegistration;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,12 +21,21 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@ValidRegistration
 public class User implements Serializable {
 	private static final long serialVersionUID = 8455135942008217481L;
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	long id;
+	
+	@Email
+	@Column(unique= true)
+	String username;
+	
+	String password;
+	
+	private boolean registered;
 	
 	@Size(min=1, max=255, message="First name must be greater than 1 and less than 255 characters")
 	String firstName;
@@ -60,22 +71,13 @@ public class User implements Serializable {
 	@Size(max=5, message="You can select up to 5 dates")
     List<String> selectedDates;
 	
-	@NotNull(message="Cell phone must not be null")
 	String cellPhone;
 	
-	@NotNull(message="Work phone must not be null")
 	String workPhone;
 	
-	@NotNull(message="Birthdate must not be null")
 	Date birthdate;
 
-	@NotNull(message="Sex must not be null")
 	Sex sex;
-
-	@Email
-	String username;
-	
-	String password;
 
 	public enum Sex {
 		male, female
@@ -188,5 +190,11 @@ public class User implements Serializable {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public boolean isRegistered() {
+		return registered;
+	}
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
 	}
 }

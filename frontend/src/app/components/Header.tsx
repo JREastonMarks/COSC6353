@@ -6,7 +6,7 @@ import useSWR from 'swr'
 export default function Header() {
     const pathname = usePathname()
 
-    if((pathname == "/") || (pathname == "/login")) {
+    if((pathname == "/") || (pathname == "/login") || (pathname == "/register")) {
         return null
     }
 

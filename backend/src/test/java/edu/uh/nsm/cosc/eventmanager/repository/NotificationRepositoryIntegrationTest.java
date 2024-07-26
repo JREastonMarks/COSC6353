@@ -39,7 +39,7 @@ public class NotificationRepositoryIntegrationTest {
 	@Test
 	void createNotification() {
 		User receiver = userRepository.getReferenceById(1L);
-		User sender = userRepository.getReferenceById(1L);
+		User sender = userRepository.getReferenceById(2L);
 		
 		Notification notification = new Notification();
 		notification.setDate(Date.from(Instant.now()));

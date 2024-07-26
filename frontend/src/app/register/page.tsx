@@ -15,7 +15,7 @@ export default function Register() {
         registerData.append("password", password)
         registerData.append("role", role)
 
-        await fetch("/api/register", {
+        await fetch("/api/user/register", {
             method: "POST",
             body: registerData
         }).then(response => {
