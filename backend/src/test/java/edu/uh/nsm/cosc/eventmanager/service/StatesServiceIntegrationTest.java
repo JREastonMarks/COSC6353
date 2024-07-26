@@ -27,7 +27,7 @@ public class StatesServiceIntegrationTest {
 	void testStates() {
 		List<States> states = statesService.getStates();
 		
-		assertThat(states.size()).isEqualTo(1);
+		assertThat(states.size()).isEqualTo(50);
 	}
 	
 	@Test

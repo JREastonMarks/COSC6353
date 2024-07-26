@@ -14,20 +14,20 @@ import edu.uh.nsm.cosc.eventmanager.model.States;
 @SpringBootTest
 @Sql("/test-states.sql")
 public class StatesRepositoryIntegrationTest {
-	
-	@Autowired
-	private StatesRepository statesRepository;
-	
-	@Test
-	void contextLoads() throws Exception {
-		assertThat(statesRepository).isNotNull();
-	}
-	
-	@Test
-	void testStates() {
-		List<States> states = statesRepository.findAll();
-		
-		assertThat(states.size()).isEqualTo(1);
-	}
+    
+    @Autowired
+    private StatesRepository statesRepository;
+    
+    @Test
+    void contextLoads() throws Exception {
+        assertThat(statesRepository).isNotNull();
+    }
+    
+    @Test
+    void testStates() {
+        List<States> states = statesRepository.findAll();
+        
+        assertThat(states.size()).isEqualTo(50);
+    }
 
 }
