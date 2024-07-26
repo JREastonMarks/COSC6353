@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -19,6 +20,7 @@ import edu.uh.nsm.cosc.eventmanager.model.User.Sex;
 
 
 @SpringBootTest
+@Sql("/test-states.sql")
 public class UserUnitTest {
 	
 	@Autowired
@@ -52,6 +54,7 @@ public class UserUnitTest {
 		States state = new States();
 		state.setCode("TX");
 		state.setState("Texas");
+		user.setState(state);
 		
 		assertThat(user.getId()).isEqualTo(1L);
 		assertThat(user.getFirstName()).isEqualTo("first");
