@@ -22,9 +22,9 @@ interface User {
     city: string;
     state: { code: string, state: string } | null; // Adjusted to match the backend model
     zipcode: string;
-    skills: string[];
+    skills: string[] | null;
     preferences: string;
-    selectedDates: Date[];
+    selectedDates: Date[] | null;
 }
 
 interface StateOption {
@@ -32,109 +32,122 @@ interface StateOption {
     state: string;
 }
 
-// const skillOptions = [
-//     { value: "Database Management", label: "Database Management" },
-//     { value: "IT Proficiency", label: "IT Proficiency" },
-//     { value: "Website Management", label: "Website Management" },
-//     { value: "Project Management", label: "Project Management" },
-//     { value: "Time Management", label: "Time Management" },
-//     { value: "Budgeting", label: "Budgeting" },
-//     { value: "Communication", label: "Communication" },
-//     { value: "Teamwork", label: "Teamwork" },
-//     { value: "Problem-Solving", label: "Problem-Solving" },
-//     { value: "Fundraising", label: "Fundraising" },
-//     { value: "Grant Writing", label: "Grant Writing" },
-//     { value: "Policy and Advocacy", label: "Policy and Advocacy" },
-//     { value: "Leadership", label: "Leadership" },
-//     { value: "Adaptability", label: "Adaptability" },
-//     { value: "Ethical Awareness", label: "Ethical Awareness" },
-//     { value: "Empathy", label: "Empathy" },
-//     { value: "Cultural Competence", label: "Cultural Competence" },
-//     { value: "Resilience", label: "Resilience" }
-// ];
-
-// const stateOptions = [
-//     { value: 'AL', label: 'Alabama' },
-//     { value: 'AK', label: 'Alaska' },
-//     { value: 'AZ', label: 'Arizona' },
-//     { value: 'AR', label: 'Arkansas' },
-//     { value: 'CA', label: 'California' },
-//     { value: 'CO', label: 'Colorado' },
-//     { value: 'CT', label: 'Connecticut' },
-//     { value: 'DE', label: 'Delaware' },
-//     { value: 'FL', label: 'Florida' },
-//     { value: 'GA', label: 'Georgia' },
-//     { value: 'HI', label: 'Hawaii' },
-//     { value: 'ID', label: 'Idaho' },
-//     { value: 'IL', label: 'Illinois' },
-//     { value: 'IN', label: 'Indiana' },
-//     { value: 'IA', label: 'Iowa' },
-//     { value: 'KS', label: 'Kansas' },
-//     { value: 'KY', label: 'Kentucky' },
-//     { value: 'LA', label: 'Louisiana' },
-//     { value: 'ME', label: 'Maine' },
-//     { value: 'MD', label: 'Maryland' },
-//     { value: 'MA', label: 'Massachusetts' },
-//     { value: 'MI', label: 'Michigan' },
-//     { value: 'MN', label: 'Minnesota' },
-//     { value: 'MS', label: 'Mississippi' },
-//     { value: 'MO', label: 'Missouri' },
-//     { value: 'MT', label: 'Montana' },
-//     { value: 'NE', label: 'Nebraska' },
-//     { value: 'NV', label: 'Nevada' },
-//     { value: 'NH', label: 'New Hampshire' },
-//     { value: 'NJ', label: 'New Jersey' },
-//     { value: 'NM', label: 'New Mexico' },
-//     { value: 'NY', label: 'New York' },
-//     { value: 'NC', label: 'North Carolina' },
-//     { value: 'ND', label: 'North Dakota' },
-//     { value: 'OH', label: 'Ohio' },
-//     { value: 'OK', label: 'Oklahoma' },
-//     { value: 'OR', label: 'Oregon' },
-//     { value: 'PA', label: 'Pennsylvania' },
-//     { value: 'RI', label: 'Rhode Island' },
-//     { value: 'SC', label: 'South Carolina' },
-//     { value: 'SD', label: 'South Dakota' },
-//     { value: 'TN', label: 'Tennessee' },
-//     { value: 'TX', label: 'Texas' },
-//     { value: 'UT', label: 'Utah' },
-//     { value: 'VT', label: 'Vermont' },
-//     { value: 'VA', label: 'Virginia' },
-//     { value: 'WA', label: 'Washington' },
-//     { value: 'WV', label: 'West Virginia' },
-//     { value: 'WI', label: 'Wisconsin' },
-//     { value: 'WY', label: 'Wyoming' }
-// ];
+const skillOptions = [
+    { value: "Database Management", label: "Database Management" },
+    { value: "IT Proficiency", label: "IT Proficiency" },
+    { value: "Website Management", label: "Website Management" },
+    { value: "Project Management", label: "Project Management" },
+    { value: "Time Management", label: "Time Management" },
+    { value: "Budgeting", label: "Budgeting" },
+    { value: "Communication", label: "Communication" },
+    { value: "Teamwork", label: "Teamwork" },
+    { value: "Problem-Solving", label: "Problem-Solving" },
+    { value: "Fundraising", label: "Fundraising" },
+    { value: "Grant Writing", label: "Grant Writing" },
+    { value: "Policy and Advocacy", label: "Policy and Advocacy" },
+    { value: "Leadership", label: "Leadership" },
+    { value: "Adaptability", label: "Adaptability" },
+    { value: "Ethical Awareness", label: "Ethical Awareness" },
+    { value: "Empathy", label: "Empathy" },
+    { value: "Cultural Competence", label: "Cultural Competence" },
+    { value: "Resilience", label: "Resilience" }
+];
 
 export default function Administrator() {
-    // const [selectedSkillOptions, setSelectedSkillOptions] = useState<string[]>([])
-    // const handleSkillChange = (selectedSkillOptions: string[]) => {
-    //     const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : [];
-    //     if (selectedSkillOptions.length <= 3) {
-    //         setUser(prevState => ({ ...prevState, skills: selectedValues }));
-    //         setSelectedSkillOptions(selectedSkillOptions);
-    //     }
-    // };
+    const [selectedSkillOptions, setSelectedSkillOptions] = useState<{ value: string; label: string }[] | null>(null);
+    const handleSkillChange = (selectedSkillOptions: { value: string; label: string }[] | null) => {
+        if (selectedSkillOptions && selectedSkillOptions.length > 3) {
+            // Limit the number of selected skills to 3
+            selectedSkillOptions = selectedSkillOptions.slice(0, 3);
+            alert("You can select a maximum of 3 skills.");
+        }
+    
+        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : null;
+        setSelectedSkillOptions(selectedSkillOptions);
+        setUser(prevState => ({ ...prevState, skills: selectedValues }));
+    
+        try {
+            // Make API call to update the user resource
+            fetch(`/api/user/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...user,
+                    skills: selectedValues,
+                }),
+            });
+        } catch (error) {
+            console.error("Error updating user skills:", error);
+        }
+    };
+    
 
     const [selectedStateOption, setSelectedStateOption] = useState<{ value: string; label: string } | null>(null);
     const [stateOptions, setStateOptions] = useState<{ value: string; label: string }[]>([]);
-    const handleStateChange = (selectedStateOption: { value: string; label: string } | null) => {
+    const handleStateChange = async (selectedStateOption: { value: string; label: string } | null) => {
+        let state = null;
+    
         if (selectedStateOption) {
-            const state = { code: selectedStateOption.value, state: selectedStateOption.label };
-            setUser(prevState => ({ ...prevState, state }));
+            state = { code: selectedStateOption.value, state: selectedStateOption.label };
             setSelectedStateOption(selectedStateOption);
         } else {
-            setUser(prevState => ({ ...prevState, state: null }));
             setSelectedStateOption(null);
         }
+    
+        // Update local state
+        setUser(prevState => ({ ...prevState, state }));
+    
+        try {
+            // Make API call to update the user resource
+            await fetch(`/api/user/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...user,
+                    state,
+                }),
+            });
+    
+        } catch (error) {
+            // Handle errors
+            console.error("Error updating user state:", error);
+        }
     };
+    
 
-    // const [selectedDates, setSelectedDates] = useState<Date[]>([])
-    // const handleDateChange = (dates: Date[]) => {
-    //     const filteredDates = dates.filter(date => date >= addDays(new Date(), 0));
-    //     const slicedDates = filteredDates.slice(0, 5);
-    //     setSelectedDates(slicedDates);
-    // };
+    const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+    const handleDateChange = async (dates: Date[]) => {
+        // Filter out past dates and limit to 5 dates
+        const filteredDates = dates.filter(date => date >= addDays(new Date(), 0));
+        const slicedDates = filteredDates.slice(0, 5);
+    
+        // Update local state
+        setSelectedDates(slicedDates);
+        setUser(prevState => ({ ...prevState, selectedDates: slicedDates }));
+    
+        try {
+            // Make API call to update the user resource
+            await fetch(`/api/user/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...user,
+                    selectedDates: slicedDates,
+                }),
+            });
+    
+        } catch (error) {
+            // Handle errors
+            console.error("Error updating user selected dates:", error);
+        }
+    };
+    
 
     const [user, setUser] = useState<User>({
         id: '',
@@ -321,16 +334,24 @@ export default function Administrator() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-2">
                                 <div className="mt-2">
                                     <label htmlFor="skill" className="block text-sm font-medium leading-6 text-gray-900">Skills (Max 3)</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select options={skillOptions} value={user.skills.map(skill => ({ value: skill, label: skill }))}  onChange={handleSkillChange} id="skill" name="skill" className="block flex-1 text-gray-900 placeholder:text-gray-400" required></Select>
+                                    <Select 
+                                        options={skillOptions} 
+                                        value={selectedSkillOptions} 
+                                        onChange={handleSkillChange} 
+                                        id="skills" 
+                                        name="skills" 
+                                        isMulti 
+                                        className="text-gray-900 placeholder:text-gray-400" 
+                                    />                               
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-2">
                                 <div className="mt-2">
@@ -341,22 +362,36 @@ export default function Administrator() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-6">
                                 <div className="mt-4">
                                     <label htmlFor="datePicker" className="block text-sm font-medium leading-6 text-gray-900">Availability</label>
                                 </div>
-                                <div className="flex ">
-                                    <DatePicker id="datePicker" name="datePicker" mode="multiple" value={user.selectedDates} onChange={handleDateChange} disabledDate={(date) => date < addDays(new Date(), 0)} showToday={false} className="block flex-1 text-gray-900 placeholder:text-gray-400" />
+                                <div className="flex">
+                                        <DatePicker 
+                                            id="datePicker" 
+                                            name="datePicker" 
+                                            mode="multiple" 
+                                            value={selectedDates} 
+                                            onChange={handleDateChange} 
+                                            disabledDate={(date) => date < addDays(new Date(), 0)} 
+                                            showToday={false} 
+                                            className="text-gray-900 placeholder:text-gray-400"
+                                        />
                                 </div>
                                 <div className="mt-2">
-                                    <p>Selected Dates: {user.selectedDates.map(date => moment(date).format("MM/DD/YYYY")).join(", ")}</p>
-                                    {user.selectedDates.length >= 5 && (
-                                        <p>Maximum 5 dates can be selected!</p>
+                                    <p className="text-gray-700">
+                                        Selected Dates: 
+                                        {user.selectedDates && user.selectedDates.length > 0
+                                        ? user.selectedDates.map(date => moment(date).format("MM/DD/YYYY")).join(", ")
+                                        : "No dates selected"}
+                                    </p>
+                                    {user.selectedDates && user.selectedDates.length >= 5 && (
+                                        <p className="text-red-600">Maximum 5 dates can be selected!</p>
                                     )}
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
                         <div className="mt-4 bg-sky-400 text-white">
                             <button className="p-2 w-full">
                                 Save
