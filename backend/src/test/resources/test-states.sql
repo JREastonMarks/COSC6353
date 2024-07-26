@@ -1,10 +1,5 @@
--- Delete all entries in the states table
 DELETE FROM states;
 
--- Or, use TRUNCATE for a faster operation
--- TRUNCATE TABLE states;
-
--- Insert new values into the states table
 INSERT INTO states (code, state) VALUES
 ('AL', 'Alabama'),
 ('AK', 'Alaska'),
