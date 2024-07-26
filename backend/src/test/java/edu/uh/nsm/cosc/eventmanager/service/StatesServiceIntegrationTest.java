@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import edu.uh.nsm.cosc.eventmanager.model.Notification;
 import edu.uh.nsm.cosc.eventmanager.model.States;
 
 @SpringBootTest
