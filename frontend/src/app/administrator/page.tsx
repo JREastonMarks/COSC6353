@@ -20,112 +20,123 @@ interface User {
     address: string;
     address2: string;
     city: string;
-    state: string[];
+    state: { code: string, state: string } | null; // Adjusted to match the backend model
     zipcode: string;
     skills: string[];
     preferences: string;
     selectedDates: Date[];
-  }
+}
 
-const skillOptions = [
-    { value: "Database Management", label: "Database Management" },
-    { value: "IT Proficiency", label: "IT Proficiency" },
-    { value: "Website Management", label: "Website Management" },
-    { value: "Project Management", label: "Project Management" },
-    { value: "Time Management", label: "Time Management" },
-    { value: "Budgeting", label: "Budgeting" },
-    { value: "Communication", label: "Communication" },
-    { value: "Teamwork", label: "Teamwork" },
-    { value: "Problem-Solving", label: "Problem-Solving" },
-    { value: "Fundraising", label: "Fundraising" },
-    { value: "Grant Writing", label: "Grant Writing" },
-    { value: "Policy and Advocacy", label: "Policy and Advocacy" },
-    { value: "Leadership", label: "Leadership" },
-    { value: "Adaptability", label: "Adaptability" },
-    { value: "Ethical Awareness", label: "Ethical Awareness" },
-    { value: "Empathy", label: "Empathy" },
-    { value: "Cultural Competence", label: "Cultural Competence" },
-    { value: "Resilience", label: "Resilience" }
-];
+interface StateOption {
+    code: string;
+    state: string;
+}
 
-const stateOptions = [
-    { value: 'AL', label: 'Alabama' },
-    { value: 'AK', label: 'Alaska' },
-    { value: 'AZ', label: 'Arizona' },
-    { value: 'AR', label: 'Arkansas' },
-    { value: 'CA', label: 'California' },
-    { value: 'CO', label: 'Colorado' },
-    { value: 'CT', label: 'Connecticut' },
-    { value: 'DE', label: 'Delaware' },
-    { value: 'FL', label: 'Florida' },
-    { value: 'GA', label: 'Georgia' },
-    { value: 'HI', label: 'Hawaii' },
-    { value: 'ID', label: 'Idaho' },
-    { value: 'IL', label: 'Illinois' },
-    { value: 'IN', label: 'Indiana' },
-    { value: 'IA', label: 'Iowa' },
-    { value: 'KS', label: 'Kansas' },
-    { value: 'KY', label: 'Kentucky' },
-    { value: 'LA', label: 'Louisiana' },
-    { value: 'ME', label: 'Maine' },
-    { value: 'MD', label: 'Maryland' },
-    { value: 'MA', label: 'Massachusetts' },
-    { value: 'MI', label: 'Michigan' },
-    { value: 'MN', label: 'Minnesota' },
-    { value: 'MS', label: 'Mississippi' },
-    { value: 'MO', label: 'Missouri' },
-    { value: 'MT', label: 'Montana' },
-    { value: 'NE', label: 'Nebraska' },
-    { value: 'NV', label: 'Nevada' },
-    { value: 'NH', label: 'New Hampshire' },
-    { value: 'NJ', label: 'New Jersey' },
-    { value: 'NM', label: 'New Mexico' },
-    { value: 'NY', label: 'New York' },
-    { value: 'NC', label: 'North Carolina' },
-    { value: 'ND', label: 'North Dakota' },
-    { value: 'OH', label: 'Ohio' },
-    { value: 'OK', label: 'Oklahoma' },
-    { value: 'OR', label: 'Oregon' },
-    { value: 'PA', label: 'Pennsylvania' },
-    { value: 'RI', label: 'Rhode Island' },
-    { value: 'SC', label: 'South Carolina' },
-    { value: 'SD', label: 'South Dakota' },
-    { value: 'TN', label: 'Tennessee' },
-    { value: 'TX', label: 'Texas' },
-    { value: 'UT', label: 'Utah' },
-    { value: 'VT', label: 'Vermont' },
-    { value: 'VA', label: 'Virginia' },
-    { value: 'WA', label: 'Washington' },
-    { value: 'WV', label: 'West Virginia' },
-    { value: 'WI', label: 'Wisconsin' },
-    { value: 'WY', label: 'Wyoming' }
-];
+// const skillOptions = [
+//     { value: "Database Management", label: "Database Management" },
+//     { value: "IT Proficiency", label: "IT Proficiency" },
+//     { value: "Website Management", label: "Website Management" },
+//     { value: "Project Management", label: "Project Management" },
+//     { value: "Time Management", label: "Time Management" },
+//     { value: "Budgeting", label: "Budgeting" },
+//     { value: "Communication", label: "Communication" },
+//     { value: "Teamwork", label: "Teamwork" },
+//     { value: "Problem-Solving", label: "Problem-Solving" },
+//     { value: "Fundraising", label: "Fundraising" },
+//     { value: "Grant Writing", label: "Grant Writing" },
+//     { value: "Policy and Advocacy", label: "Policy and Advocacy" },
+//     { value: "Leadership", label: "Leadership" },
+//     { value: "Adaptability", label: "Adaptability" },
+//     { value: "Ethical Awareness", label: "Ethical Awareness" },
+//     { value: "Empathy", label: "Empathy" },
+//     { value: "Cultural Competence", label: "Cultural Competence" },
+//     { value: "Resilience", label: "Resilience" }
+// ];
+
+// const stateOptions = [
+//     { value: 'AL', label: 'Alabama' },
+//     { value: 'AK', label: 'Alaska' },
+//     { value: 'AZ', label: 'Arizona' },
+//     { value: 'AR', label: 'Arkansas' },
+//     { value: 'CA', label: 'California' },
+//     { value: 'CO', label: 'Colorado' },
+//     { value: 'CT', label: 'Connecticut' },
+//     { value: 'DE', label: 'Delaware' },
+//     { value: 'FL', label: 'Florida' },
+//     { value: 'GA', label: 'Georgia' },
+//     { value: 'HI', label: 'Hawaii' },
+//     { value: 'ID', label: 'Idaho' },
+//     { value: 'IL', label: 'Illinois' },
+//     { value: 'IN', label: 'Indiana' },
+//     { value: 'IA', label: 'Iowa' },
+//     { value: 'KS', label: 'Kansas' },
+//     { value: 'KY', label: 'Kentucky' },
+//     { value: 'LA', label: 'Louisiana' },
+//     { value: 'ME', label: 'Maine' },
+//     { value: 'MD', label: 'Maryland' },
+//     { value: 'MA', label: 'Massachusetts' },
+//     { value: 'MI', label: 'Michigan' },
+//     { value: 'MN', label: 'Minnesota' },
+//     { value: 'MS', label: 'Mississippi' },
+//     { value: 'MO', label: 'Missouri' },
+//     { value: 'MT', label: 'Montana' },
+//     { value: 'NE', label: 'Nebraska' },
+//     { value: 'NV', label: 'Nevada' },
+//     { value: 'NH', label: 'New Hampshire' },
+//     { value: 'NJ', label: 'New Jersey' },
+//     { value: 'NM', label: 'New Mexico' },
+//     { value: 'NY', label: 'New York' },
+//     { value: 'NC', label: 'North Carolina' },
+//     { value: 'ND', label: 'North Dakota' },
+//     { value: 'OH', label: 'Ohio' },
+//     { value: 'OK', label: 'Oklahoma' },
+//     { value: 'OR', label: 'Oregon' },
+//     { value: 'PA', label: 'Pennsylvania' },
+//     { value: 'RI', label: 'Rhode Island' },
+//     { value: 'SC', label: 'South Carolina' },
+//     { value: 'SD', label: 'South Dakota' },
+//     { value: 'TN', label: 'Tennessee' },
+//     { value: 'TX', label: 'Texas' },
+//     { value: 'UT', label: 'Utah' },
+//     { value: 'VT', label: 'Vermont' },
+//     { value: 'VA', label: 'Virginia' },
+//     { value: 'WA', label: 'Washington' },
+//     { value: 'WV', label: 'West Virginia' },
+//     { value: 'WI', label: 'Wisconsin' },
+//     { value: 'WY', label: 'Wyoming' }
+// ];
 
 export default function Administrator() {
-    const [selectedSkillOptions, setSelectedSkillOptions] = useState<string[]>([])
-    const handleSkillChange = (selectedSkillOptions: string[]) => {
-        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : [];
-        if (selectedSkillOptions.length <= 3) {
-            setUser(prevState => ({ ...prevState, skills: selectedValues }));
-            setSelectedSkillOptions(selectedSkillOptions);
+    // const [selectedSkillOptions, setSelectedSkillOptions] = useState<string[]>([])
+    // const handleSkillChange = (selectedSkillOptions: string[]) => {
+    //     const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : [];
+    //     if (selectedSkillOptions.length <= 3) {
+    //         setUser(prevState => ({ ...prevState, skills: selectedValues }));
+    //         setSelectedSkillOptions(selectedSkillOptions);
+    //     }
+    // };
+
+    const [selectedStateOption, setSelectedStateOption] = useState<{ value: string; label: string } | null>(null);
+    const [stateOptions, setStateOptions] = useState<{ value: string; label: string }[]>([]);
+    const handleStateChange = (selectedStateOption: { value: string; label: string } | null) => {
+        if (selectedStateOption) {
+            const state = { code: selectedStateOption.value, state: selectedStateOption.label };
+            setUser(prevState => ({ ...prevState, state }));
+            setSelectedStateOption(selectedStateOption);
+        } else {
+            setUser(prevState => ({ ...prevState, state: null }));
+            setSelectedStateOption(null);
         }
     };
 
-    const [selectedStateOptions, setSelectedStateOptions] = useState<string[]>([])
-    const handleStateChange = (selectedStateOptions: string[]) => {
-        const selectedValues = selectedStateOptions ? selectedStateOptions.map(option => option.value) : [];
-        setUser(prevState => ({ ...prevState, state: selectedValues }));
-        setSelectedStateOptions(selectedStateOptions);
-    };
+    // const [selectedDates, setSelectedDates] = useState<Date[]>([])
+    // const handleDateChange = (dates: Date[]) => {
+    //     const filteredDates = dates.filter(date => date >= addDays(new Date(), 0));
+    //     const slicedDates = filteredDates.slice(0, 5);
+    //     setSelectedDates(slicedDates);
+    // };
 
-    const [selectedDates, setSelectedDates] = useState<Date[]>([])
-    const handleDateChange = (dates: Date[]) => {
-        const filteredDates = dates.filter(date => date >= addDays(new Date(), 0));
-        const slicedDates = filteredDates.slice(0, 5);
-        setSelectedDates(slicedDates);
-    };
-
-    const [user, setUser] = useState({
+    const [user, setUser] = useState<User>({
         id: '',
         lastName: '',
         firstName: '',
@@ -139,7 +150,7 @@ export default function Administrator() {
         address: '',
         address2: '',
         city: '',
-        state: [],
+        state: null,
         zipcode: '',
         skills: [],
         preferences: '',
@@ -150,11 +161,17 @@ export default function Administrator() {
         const fetchUser = async () => {
             const response = await fetch('/api/user/1');
             const data = await response.json();
-
             setUser(data);
         };
 
+        const fetchStates = async () => {
+            const response = await fetch('/api/states');
+            const data: StateOption[] = await response.json();
+            setStateOptions(data.map(state => ({ value: state.code, label: state.state })));
+        };
+
         fetchUser();
+        fetchStates();
     }, []);
 
     return (
@@ -286,7 +303,13 @@ export default function Administrator() {
                                     <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">State</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <Select options={stateOptions} value={user.state.map(state => ({ value: state, label: state }))}  onChange={handleStateChange} id="state" name="state" className="text-gray-900 placeholder:text-gray-400" required></Select>
+                                    <Select options={stateOptions}
+                                        value={selectedStateOption}
+                                        onChange={handleStateChange}
+                                        id="state"
+                                        name="state"
+                                        className="text-gray-900 placeholder:text-gray-400"
+                                        required></Select>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -298,7 +321,7 @@ export default function Administrator() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        {/* <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-2">
                                 <div className="mt-2">
                                     <label htmlFor="skill" className="block text-sm font-medium leading-6 text-gray-900">Skills (Max 3)</label>
@@ -307,7 +330,7 @@ export default function Administrator() {
                                     <Select options={skillOptions} value={user.skills.map(skill => ({ value: skill, label: skill }))}  onChange={handleSkillChange} id="skill" name="skill" className="block flex-1 text-gray-900 placeholder:text-gray-400" required></Select>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-2">
                                 <div className="mt-2">
@@ -318,7 +341,7 @@ export default function Administrator() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        {/* <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-6">
                                 <div className="mt-4">
                                     <label htmlFor="datePicker" className="block text-sm font-medium leading-6 text-gray-900">Availability</label>
@@ -333,7 +356,7 @@ export default function Administrator() {
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="mt-4 bg-sky-400 text-white">
                             <button className="p-2 w-full">
                                 Save

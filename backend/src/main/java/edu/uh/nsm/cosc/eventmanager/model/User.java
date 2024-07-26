@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -45,8 +47,9 @@ public class User implements Serializable {
 	@Size(min=5, max=9, message="State must be greater than 5 and less than 9 characters")
 	String zipcode;
 
-	@Size(min=1, max=1, message="You must select a state")
-    List<String> state;
+	@ManyToOne
+	@JoinColumn(name = "state", referencedColumnName = "code")
+    States state;
 	
 	@Size(min=1, max=3, message="You must select from 1 to 3 skills")
     List<String> skills;
@@ -144,10 +147,10 @@ public class User implements Serializable {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public List<String> getState() {
+	public States getState() {
 		return state;
 	}
-	public void setState(List<String> state) {
+	public void setState(States state) {
 		this.state = state;
 	}
 	public String getZipcode() {

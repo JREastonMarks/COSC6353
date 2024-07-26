@@ -40,7 +40,6 @@ public class UserUnitTest {
 		user.setAddress("1 1st Rd");
         user.setAddress2(null);
         user.setCity("Houston");
-        user.setState(Arrays.asList("Texas"));
         user.setZipcode("10000");
         user.setSkills(Arrays.asList("Database Management"));
         user.setPreferences(null);
@@ -49,6 +48,10 @@ public class UserUnitTest {
         ));
 		user.setUsername("test@eventmanager.org");
 		user.setPassword("testpass");
+
+		States state = new States();
+		state.setCode("TX");
+		state.setState("Texas");
 		
 		assertThat(user.getId()).isEqualTo(1L);
 		assertThat(user.getFirstName()).isEqualTo("first");
@@ -59,7 +62,8 @@ public class UserUnitTest {
 		assertThat(user.getAddress()).isEqualTo("1 1st Rd");
 		assertThat(user.getAddress2()).isEqualTo(null);
 		assertThat(user.getCity()).isEqualTo("Houston");
-		assertThat(user.getState()).isEqualTo(Arrays.asList("Texas"));
+		assertThat(user.getState().getCode()).isEqualTo("TX");
+		assertThat(user.getState().getState()).isEqualTo("Texas");
 		assertThat(user.getZipcode()).isEqualTo("10000");
 		assertThat(user.getSkills()).isEqualTo(Arrays.asList("Database Management"));
 		assertThat(user.getPreferences()).isEqualTo(null);
