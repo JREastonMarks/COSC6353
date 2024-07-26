@@ -390,7 +390,10 @@ export default function Volunteer() {
                             </div>
                         </div>
                         <div className="mt-4 bg-sky-400 text-white">
-                            <button className="p-2 w-full">
+                            <button 
+                            type="submit"
+                            className="p-2 w-full"
+                            onClick={saveUserData}>
                                 Save
                             </button>
                         </div>
