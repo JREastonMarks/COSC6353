@@ -90,13 +90,6 @@ export default function AdministratorNotifications() {
     const fetchNotifications = async () => {
       const response = await fetch('/api/notifications');
       const data = await response.json();
-      // let message: NotificationProps = {
-      //   sender: "Event Management",
-      //   title: "New Event Scheduled",
-      //   message: "You have a new event scheduled for July 4th, 2024.",
-      //   date: "7/29/2024"
-      // }
-      // const messages = [message];
       setNotifications(data);
     };
 

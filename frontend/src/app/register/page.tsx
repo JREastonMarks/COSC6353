@@ -6,7 +6,7 @@ export default function Register() {
     const [email, setEmail] = useState<string>("") 
     const [password, setPassword] = useState<string>("") 
     const [confirmPassword, setConfirmPassword]  = useState<string>("")
-    const [role, setRole] = useState<string>("") 
+    const [role, setRole] = useState<string>("volunteer") 
 
     async function handleSubmit(e) {
         e.preventDefault();

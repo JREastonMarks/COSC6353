@@ -9,12 +9,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import edu.uh.nsm.cosc.eventmanager.model.constraint.ValidRegistration;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +38,8 @@ public class User implements Serializable {
 	String username;
 	
 	String password;
+	
+	private String role;
 	
 	private boolean registered;
 	
@@ -62,14 +68,15 @@ public class User implements Serializable {
 	@JoinColumn(name = "state", referencedColumnName = "code")
     States state;
 	
+	@ManyToMany
 	@Size(min=1, max=3, message="You must select from 1 to 3 skills")
-    List<String> skills;
+    List<Skill> skills;
 
 	@Size(min=0, max=255, message="Preferences must be less than 255 characters")
 	String preferences;
 
 	@Size(max=5, message="You can select up to 5 dates")
-    List<String> selectedDates;
+    List<Date> selectedDates;
 	
 	String cellPhone;
 	
@@ -161,10 +168,10 @@ public class User implements Serializable {
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
-	public List<String> getSkills() {
+	public List<Skill> getSkills() {
 		return skills;
 	}
-	public void setSkills(List<String> skills) {
+	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
 	}
 	public String getPreferences() {
@@ -173,10 +180,10 @@ public class User implements Serializable {
 	public void setPreferences(String preferences){
 		this.preferences = preferences;
 	}
-	public List<String> getSelectedDates() {
+	public List<Date> getSelectedDates() {
         return selectedDates;
     }
-    public void setSelectedDates(List<String> selectedDates) {
+    public void setSelectedDates(List<Date> selectedDates) {
         this.selectedDates = selectedDates;
     }
 	public String getPassword() {
@@ -196,5 +203,11 @@ public class User implements Serializable {
 	}
 	public void setRegistered(boolean registered) {
 		this.registered = registered;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

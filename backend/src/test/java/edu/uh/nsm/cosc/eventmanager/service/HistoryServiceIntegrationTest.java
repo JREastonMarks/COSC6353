@@ -16,7 +16,7 @@ import edu.uh.nsm.cosc.eventmanager.repository.EventRepository;
 import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 
 @SpringBootTest
-@Sql("/test-notifications.sql")
+@Sql("/test-histories.sql")
 public class HistoryServiceIntegrationTest {
     @Autowired
 	private HistoryService historyService;
@@ -48,8 +48,8 @@ public class HistoryServiceIntegrationTest {
 
 	@Test
 	void createHistory(){
-		User volunteer = userRepository.getReferenceById(1L);
-		Event event = eventRepository.getReferenceById(1L);
+		User volunteer = userRepository.findById(10L).get();
+		Event event = eventRepository.findById(1L).getFirst();
 
 		History history = new History();
 		history.setVolunteer(volunteer);

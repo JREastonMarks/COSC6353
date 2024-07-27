@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 import edu.uh.nsm.cosc.eventmanager.service.UserDetailService;
@@ -38,7 +38,7 @@ public class SecurityConfig {
 			.httpBasic(Customizer.withDefaults())
 			.formLogin(form -> form
 					.loginPage("/login")
-					.defaultSuccessUrl("/notifications", true)
+					.successHandler(loginAuthenticationSuccessHandler())
 					.loginProcessingUrl("/api/login")
 					.failureUrl("/login?error")
 			).csrf((csrf) -> csrf.disable())
@@ -73,6 +73,11 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(11);
+	}
+	
+	@Bean
+	public AuthenticationSuccessHandler loginAuthenticationSuccessHandler(){
+	    return new LoginSuccessHandler();
 	}
 
 }

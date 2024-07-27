@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.uh.nsm.cosc.eventmanager.model.Match;
+import edu.uh.nsm.cosc.eventmanager.model.Skill;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.service.MatchService;
@@ -32,10 +33,10 @@ public class MatchControllerIntegrationTest {
     @Test
     void matchShouldReturnMatch() throws Exception{
         Event event = new Event();
-        event.setSkills(Arrays.asList("Database Management"));
+        event.setSkills(Arrays.asList(new Skill("Database Management")));
 
         User volunteer = new User();
-        volunteer.setSkills(Arrays.asList("Database Management"));
+        volunteer.setSkills(Arrays.asList(new Skill("Database Management")));
         
         Match match = new Match();
         match.setId(1L);

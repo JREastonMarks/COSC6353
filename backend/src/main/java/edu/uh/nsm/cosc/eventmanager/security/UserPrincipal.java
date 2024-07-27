@@ -15,7 +15,7 @@ public class UserPrincipal implements UserDetails {
 	private User user;
 
     public UserPrincipal(User user) {
-        this.user = user;
+        this.setUser(user);
     }
 
     @Override
@@ -45,11 +45,19 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return getUser().getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return user.getUsername();
+		return getUser().getUsername();
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

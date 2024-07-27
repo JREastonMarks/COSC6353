@@ -10,11 +10,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 
 @SpringBootTest
+@Sql("/test-states.sql")
 public class EventUnitTest{
     
     @Autowired
@@ -27,30 +29,31 @@ public class EventUnitTest{
         Event event = new Event();
         event.setId(1L);
         event.setName("Event Name");
-        event.setDesc("Event Desc");
+        event.setDescription("Event Desc");
         event.setAddress("505 Main St");
         event.setAddress2(null);
         event.setCity("Houston");
         event.setZipcode("12345");
-        event.setSkills(Arrays.asList("Budgeting"));
-        event.setUrgency(Arrays.asList("Low"));
-        event.setDate((Date) df.parseObject("2024-07-04"));
+        event.setSkills(Arrays.asList(new Skill("Budgeting")));
+        event.setUrgency("Low");
+        event.setEventdate((Date) df.parseObject("2024-07-04"));
         States state = new States();
         state.setCode("TX");
         state.setState("Texas");
+        event.setState(state);
 
         assertThat(event.getId()).isEqualTo(1L);
         assertThat(event.getName()).isEqualTo("Event Name");
-        assertThat(event.getDesc()).isEqualTo("Event Desc");
+        assertThat(event.getDescription()).isEqualTo("Event Desc");
         assertThat(event.getAddress()).isEqualTo("505 Main St");
         assertThat(event.getAddress2()).isEqualTo(null);
         assertThat(event.getCity()).isEqualTo("Houston");
         assertThat(event.getState().getCode()).isEqualTo("TX");
         assertThat(event.getState().getState()).isEqualTo("Texas");
         assertThat(event.getZipcode()).isEqualTo("12345");
-        assertThat(event.getSkills()).isEqualTo(Arrays.asList("Budgeting"));
-        assertThat(event.getUrgency()).isEqualTo(Arrays.asList("Low"));
-        assertThat(event.getDate()).isEqualTo(df.parseObject("2024-07-04"));
+        assertThat(event.getSkills().getFirst().getName()).isEqualTo("Budgeting");
+        assertThat(event.getUrgency()).isEqualTo("Low");
+        assertThat(event.getEventdate()).isEqualTo(df.parseObject("2024-07-04"));
     }
 
     @Test

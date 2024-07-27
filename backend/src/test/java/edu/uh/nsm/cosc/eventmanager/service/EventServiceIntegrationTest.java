@@ -13,7 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import edu.uh.nsm.cosc.eventmanager.model.Event;
+import edu.uh.nsm.cosc.eventmanager.model.Skill;
 import edu.uh.nsm.cosc.eventmanager.model.States;
+import edu.uh.nsm.cosc.eventmanager.repository.SkillRepository;
 
 @SpringBootTest
 @Sql("/test-events.sql")
@@ -21,6 +23,9 @@ public class EventServiceIntegrationTest{
     
     @Autowired
     private EventService eventService;
+    
+    @Autowired
+    private SkillRepository skillRepository;
 
     @Test
     void contextLoads() throws Exception{
@@ -43,19 +48,22 @@ public class EventServiceIntegrationTest{
 
     @Test
     void createEvent(){
+    	
+    	Skill skill = skillRepository.findById(1L).get();
+    	
         Event event = new Event();
         event.setName("Test Event");
-        event.setDesc("Event Description");
+        event.setDescription("Event Description");
         event.setAddress("101 Main St");
         event.setAddress2(null);
         event.setCity("Houston");
         event.setZipcode("12345");
-        event.setSkills(Arrays.asList("Database Management"));
-        event.setUrgency(Arrays.asList("Low"));
+        event.setSkills(Arrays.asList(skill));
+        event.setUrgency("Low");
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             Date date = df.parse("2024-07-23");
-            event.setDate(date);
+            event.setEventdate(date);
         } 
         catch (ParseException e) {
             e.printStackTrace();
@@ -64,6 +72,8 @@ public class EventServiceIntegrationTest{
         States state = new States();
         state.setCode("TX");
         state.setState("Texas"); 
+        
+        event.setState(state);
 
         eventService.createEvent(event);
 

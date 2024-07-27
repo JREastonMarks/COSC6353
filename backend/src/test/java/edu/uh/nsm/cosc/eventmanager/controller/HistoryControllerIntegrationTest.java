@@ -28,6 +28,7 @@ public class HistoryControllerIntegrationTest {
 	@MockBean
 	private HistoryService historyService;
 	
+	
 	@Test
 	void historyShouldReturnListOfHistory() throws Exception {
 		List<History> histories = new ArrayList<>();
@@ -49,5 +50,11 @@ public class HistoryControllerIntegrationTest {
 		when(historyService.getHistory(1L)).thenReturn(history);
 		
 		this.mockMvc.perform(get("/api/history/1")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("is Pending"))).andExpect(content().string(containsString("is")));
+	}
+	
+	@Test
+	void createHistory() {
+		History history = new History();
+		historyService.createHistory(history);
 	}
 }

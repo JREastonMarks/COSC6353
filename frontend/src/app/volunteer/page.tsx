@@ -13,10 +13,9 @@ interface User {
     middleInitial: string;
     sex: 'male' | 'female';
     birthdate: Date;
-    cellPhone: number;
-    workPhone: number;
+    cellPhone: string;
+    workPhone: string;
     email: string;
-    password: string;
     address: string;
     address2: string;
     city: string;
@@ -54,6 +53,10 @@ const skillOptions = [
 ];
 
 export default function Volunteer() {
+    useEffect(() => {
+        
+    });
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type, checked } = e.target;
         
@@ -132,7 +135,6 @@ export default function Volunteer() {
         cellPhone: '',
         workPhone: '',
         email: '',
-        password: '',
         address: '',
         address2: '',
         city: '',
@@ -167,26 +169,6 @@ export default function Volunteer() {
                     <form className="bg-grey-lightest px-16 py-10">
                         <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
                             Profile Management
-                        </div>
-                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-2">
-                                <div className="mt-2">
-                                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">E-Mail</label>
-                                </div>
-                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="email" name="email" type="text" placeholder="E-Mail" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.email} onChange={handleInputChange} minLength={6} maxLength={50}></input>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-2">
-                                <div className="mt-2">
-                                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                                </div>
-                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="password" name="password" type="password" placeholder="*****" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={user.password} onChange={handleInputChange} minLength={6} maxLength={50}></input>
-                                </div>
-                            </div>
                         </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-3">

@@ -11,10 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.uh.nsm.cosc.eventmanager.model.Match;
+import edu.uh.nsm.cosc.eventmanager.model.Skill;
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 import edu.uh.nsm.cosc.eventmanager.repository.EventRepository;
+import edu.uh.nsm.cosc.eventmanager.repository.SkillRepository;
 
 @SpringBootTest
 @Sql("/test-matches.sql")
@@ -27,6 +29,9 @@ public class MatchServiceIntegrationTest {
 
     @Autowired
     private EventRepository eventRepository;
+    
+    @Autowired
+    private SkillRepository skillRepository;
 
     @Test
     void contextLoads() throws Exception{
@@ -49,11 +54,14 @@ public class MatchServiceIntegrationTest {
 
     @Test
     void createMatch(){
-        User volunteer = userRepository.getReferenceById(1L);
-        Event event = eventRepository.getReferenceById(1L);
+    	Skill skill = skillRepository.findByName("Java Development");
+    	
+    	
+        User volunteer = userRepository.findById(1L).get();
+        Event event = eventRepository.findById(2L).getFirst();
 
-        event.setSkills(Arrays.asList("Database Management"));
-        volunteer.setSkills(Arrays.asList("Database Management"));
+        event.setSkills(Arrays.asList(skill));
+        volunteer.setSkills(Arrays.asList(skill));
         
         Match match = new Match();
         match.setEvent(event);

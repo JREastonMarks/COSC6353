@@ -11,5 +11,4 @@ import edu.uh.nsm.cosc.eventmanager.model.Match;
 public interface MatchRepository extends JpaRepository<Match, Long>{
 
     List<Match> findByEvent(Event event);
-    List<Match> findBySkill(String skill);
 }

@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -25,7 +28,7 @@ public class Event implements Serializable{
     String name;
 
     @NotNull(message="Event description must not be null")
-    String desc;
+    String description;
 
     @Size(min=1, max=100, message="Event address must be greater than 1 and less than 100 characters")
     String address;
@@ -43,14 +46,16 @@ public class Event implements Serializable{
     @Size(min=5, max=9, message="Zipcode must be between 5 and 9")
     String zipcode;
 
+    @ManyToMany(fetch = FetchType.EAGER)
     @Size(min=1, message="Event skills must not be null")
-    List<String> skills;
+    List<Skill> skills;
 
     @NotNull(message="Event urgency must not be null")
-    List<String> urgency;
+    String urgency;
     
     @NotNull(message="Date must not be null")
-    Date date;
+	private
+    Date eventdate;
 
     public long getId(){
         return id;
@@ -68,15 +73,17 @@ public class Event implements Serializable{
         this.name=name;
     }
 
-    public String getDesc(){
-        return desc;
-    }
 
-    public void setDesc(String desc){
-        this.desc=desc;
-    }
 
-    public String getAddress(){
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAddress(){
         return address;
     }
 
@@ -116,27 +123,27 @@ public class Event implements Serializable{
         this.zipcode=zipcode;
     }
 
-    public List<String> getSkills(){
+    public List<Skill> getSkills(){
         return skills;
     }
     
-    public void setSkills(List<String> skills){
+    public void setSkills(List<Skill> skills){
         this.skills=skills;
     }
 
-    public List<String> getUrgency(){
+    public String getUrgency(){
         return urgency;
     }
 
-    public void setUrgency(List<String> urgency){
+    public void setUrgency(String urgency){
         this.urgency=urgency;
     }
 
-    public Date getDate(){
-        return date;
-    }
+	public Date getEventdate() {
+		return eventdate;
+	}
 
-    public void setDate(Date date){
-        this.date=date;
-    }
+	public void setEventdate(Date eventdate) {
+		this.eventdate = eventdate;
+	}
 }

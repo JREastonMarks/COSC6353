@@ -9,21 +9,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
+@Table(name="eventmatch")
 public class Match implements Serializable{
-    //private static final long serialVersionUID = ...;
+    private static final long serialVersionUID = -8680941702456711825L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     long id;
 
     @ManyToOne
     User volunteer;
     
-    @ManyToMany
+    @ManyToOne
     Event event;
     
+    @Transient
     boolean match;
     
     public long getId(){
@@ -54,10 +58,10 @@ public class Match implements Serializable{
         return match;
     }
 
-    public void setMatch(List<String> volSkills, List<String> evSkills){
+    public void setMatch(List<Skill> volSkills, List<Skill> evSkills){
         match = false;
-        for (String volSkill : volSkills){
-            for(String evSkill : evSkills){
+        for (Skill volSkill : volSkills){
+            for(Skill evSkill : evSkills){
                 if (volSkill.equals(evSkill))
                   match=true;  
             }

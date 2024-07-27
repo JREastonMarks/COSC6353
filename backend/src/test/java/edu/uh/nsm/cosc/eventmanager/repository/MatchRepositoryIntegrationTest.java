@@ -1,5 +1,6 @@
 package edu.uh.nsm.cosc.eventmanager.repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.model.Match;
+import edu.uh.nsm.cosc.eventmanager.model.Skill;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 
 @SpringBootTest
@@ -24,6 +26,9 @@ public class MatchRepositoryIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private SkillRepository skillRepository;
     
     @Test
     void contextLoads() throws Exception{
@@ -39,11 +44,13 @@ public class MatchRepositoryIntegrationTest {
 
     @Test
     void createMatch(){
-        User volunteer = userRepository.getReferenceById(1L);
-        Event event = eventRepository.getReferenceById(1L);
+        User volunteer = userRepository.findById(1L).get();
+        Event event = eventRepository.findById(1L).getFirst();
         
-        //event.setSkills(Arrays.asList("Database Management"));
-        //volunteer.setSkills(Arrays.asList("Database Management"));
+        Skill skill = skillRepository.findById(1L).get();
+        
+        event.setSkills(Arrays.asList(skill));
+        volunteer.setSkills(Arrays.asList(skill));
 
         Match match = new Match();
         match.setEvent(event);
