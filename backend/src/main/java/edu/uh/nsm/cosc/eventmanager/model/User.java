@@ -68,7 +68,7 @@ public class User implements Serializable {
 	@JoinColumn(name = "state", referencedColumnName = "code")
     States state;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@Size(min=1, max=3, message="You must select from 1 to 3 skills")
     List<Skill> skills;
 

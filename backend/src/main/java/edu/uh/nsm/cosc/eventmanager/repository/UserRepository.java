@@ -7,4 +7,5 @@ import edu.uh.nsm.cosc.eventmanager.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
+    User findById(long userId);
 }

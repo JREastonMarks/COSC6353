@@ -57,8 +57,8 @@ public class MatchServiceIntegrationTest {
     	Skill skill = skillRepository.findByName("Java Development");
     	
     	
-        User volunteer = userRepository.findById(1L).get();
-        Event event = eventRepository.findById(2L).getFirst();
+        User volunteer = userRepository.findById(1L);
+        Event event = eventRepository.findById(2L);
 
         event.setSkills(Arrays.asList(skill));
         volunteer.setSkills(Arrays.asList(skill));

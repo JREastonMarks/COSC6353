@@ -24,10 +24,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		User user = ((UserPrincipal) authentication.getPrincipal()).getUser();
 		
 		// If the user has not registered yet then send them to their registration page
-		if(!user.isRegistered() && user.getRole().equals("volunteer")) {
-			redirectStrategy.sendRedirect(request, response, "/volunteer");
-		} else if(!user.isRegistered() && !user.getRole().equals("admin")) {
-			redirectStrategy.sendRedirect(request, response, "/administrator");
+		if(!user.isRegistered()) {
+			redirectStrategy.sendRedirect(request, response, "/management");
+		
 		} else {
 			redirectStrategy.sendRedirect(request, response, "/notifiations");
 		}

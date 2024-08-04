@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 import edu.uh.nsm.cosc.eventmanager.security.UserPrincipal;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 
 @Service
@@ -34,6 +37,11 @@ public class UserService implements UserDetailsService {
     public User getUser(long id) {
     	return userRepository.getReferenceById(id);
     }
+    
+    public User findUserByUsername(String username) {
+    	User user = userRepository.findByUsername(username);
+    	return user;
+    }
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,5 +59,16 @@ public class UserService implements UserDetailsService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 			
 		userRepository.save(user);
+	}
+
+	public boolean doesUserAlreadyExist(String username) {
+		User user = userRepository.findByUsername(username);
+		return user != null;
+	}
+
+	public void updateUser(long userId, User user) {
+		user.setId(userId);
+		userRepository.save(user);
+		
 	}
 }

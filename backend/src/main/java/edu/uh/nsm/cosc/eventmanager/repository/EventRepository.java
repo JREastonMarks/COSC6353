@@ -9,5 +9,5 @@ import edu.uh.nsm.cosc.eventmanager.model.Event;
 public interface EventRepository extends JpaRepository<Event, Long>{
 
     List<Event> findByName(String name);
-    List<Event> findById(long Id);
+    Event findById(long Id);
 }

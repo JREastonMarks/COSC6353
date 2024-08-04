@@ -48,8 +48,8 @@ public class HistoryServiceIntegrationTest {
 
 	@Test
 	void createHistory(){
-		User volunteer = userRepository.findById(10L).get();
-		Event event = eventRepository.findById(1L).getFirst();
+		User volunteer = userRepository.findById(10L);
+		Event event = eventRepository.findById(1L);
 
 		History history = new History();
 		history.setVolunteer(volunteer);

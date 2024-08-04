@@ -13,7 +13,7 @@ import edu.uh.nsm.cosc.eventmanager.service.StatesService;
 @RestController
 @RequestMapping("/api")
 public class StatesController {
-private StatesService statesService;
+	private StatesService statesService;
 	
 	public StatesController(StatesService statesService) {
 		this.statesService = statesService;

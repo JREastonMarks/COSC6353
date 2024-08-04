@@ -1,15 +1,42 @@
 'use client'
 import React, {useState, useEfect} from "react"
 
+function ErrorRegistering(props) {
+    const errorMessage = props.errorMessage
+
+    if(errorMessage != "") {
+        return (<div className="mb-3" style={{color: 'red'}}>
+            {errorMessage}
+          </div>)
+    }
+
+    return null
+}
 
 export default function Register() {
     const [email, setEmail] = useState<string>("") 
     const [password, setPassword] = useState<string>("") 
     const [confirmPassword, setConfirmPassword]  = useState<string>("")
     const [role, setRole] = useState<string>("volunteer") 
+    const [errorMessage, setErrorMessage] = useState<string>("")
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        if (email == "") {
+            setErrorMessage("Username must be set")
+            return
+        }
+
+        if (password.length < 2) {
+            setErrorMessage("Invalid password length")
+            return
+        }
+
+        if (password != confirmPassword) {
+            setErrorMessage("Passwords do not match")
+            return
+        }
         const registerData = new FormData()
         registerData.append("username", email)
         registerData.append("password", password)
@@ -18,12 +45,21 @@ export default function Register() {
         await fetch("/api/user/register", {
             method: "POST",
             body: registerData
-        }).then(response => {
-            if (response.redirected) {
-              window.location.replace(response.url); 
-              return;
+        // }).then(response => {
+        //     if (response.redirected) {
+        //       window.location.replace(response.url); 
+        //       return;
+        //     }
+            
+        // })
+        }).then(response => response.text())
+        .then((text) => {
+            if (text == "success") {
+                window.location.replace("/login")
+            } else {
+                setErrorMessage(text)
             }
-          })
+        })
     }
 
     return (
@@ -34,6 +70,7 @@ export default function Register() {
                         <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
                             Register
                         </div>
+                        <ErrorRegistering errorMessage={errorMessage}></ErrorRegistering>
                         <div className="mt- grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-8">
                                 <div className="mt-2">

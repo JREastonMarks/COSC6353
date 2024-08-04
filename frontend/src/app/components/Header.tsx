@@ -12,9 +12,11 @@ export default function Header() {
 
     // Check login
     const fetcher = (...args: any[]) => fetch(...args).then(res => {
-        if(res.redirected) {
+        console.log(res)
+        if(res.redirected || res.status == 401) {
             window.location.href= "/login"
         }
+
         return res.json()})
 
     const { data, error, isLoading } = useSWR('/api/userInfo', fetcher)

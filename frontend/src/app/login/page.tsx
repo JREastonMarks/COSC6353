@@ -1,9 +1,24 @@
 'use client'
 import React, { useState, useEffect} from "react";
 
+function ErrorLoggingIn(props) {
+    const isLoggedIn = props.error;
+    if (isLoggedIn) {
+      return (<div className="mb-3" style={{color: 'red'}}>
+        Error logging in, please try again
+      </div>)
+    }
+    return null;
+  }
+
 export default function Login() {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+
+    const queryParameters = new URLSearchParams(window.location.search)
+    
+    
+    const errorLogin = queryParameters.get("error") != null
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -17,7 +32,7 @@ export default function Login() {
         }).then(response => {
             if (response.redirected) {
               window.location.replace(response.url); 
-              return;
+              return
             }
           })
     }
@@ -30,6 +45,7 @@ export default function Login() {
                         <div className="border-b py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
                             Event Manager Login
                         </div>
+                        <ErrorLoggingIn error={errorLogin}></ErrorLoggingIn>
                         <div className="mb-3">
                             <input className="border w-full p-3" name="email" type="text" placeholder="E-Mail" value={email} onChange={e => setEmail(e.target.value)}></input>
                         </div>
@@ -45,7 +61,6 @@ export default function Login() {
                     <div className="border-t px-10 py-6">
                         <div className="flex justify-between">
                             <a href="/register" className="font-bold text-primary hover:text-primary-dark no-underline">Don't have an account?</a>
-                            <a href="#" className="text-grey-darkest hover:text-black no-underline">Forgot Password?</a>
                         </div>
                     </div>
                 </div>

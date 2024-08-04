@@ -16,16 +16,20 @@ public class Skill implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 	
+	@Size(min=1, max=100, message="Skill name must be greater than one and less than 100")
+	String name;
+	
 	public Skill() {
 		
+	}
+	
+	public Skill(long id) {
+		this.id = id;
 	}
 	
 	public Skill(String name) {
 		this.name = name;
 	}
-	
-	@Size(min=1, max=100, message="Skill name must be greater than one and less than 100")
-	String name;
 
 	public long getId() {
 		return id;

@@ -44,8 +44,8 @@ public class MatchRepositoryIntegrationTest {
 
     @Test
     void createMatch(){
-        User volunteer = userRepository.findById(1L).get();
-        Event event = eventRepository.findById(1L).getFirst();
+        User volunteer = userRepository.findById(1L);
+        Event event = eventRepository.findById(1L);
         
         Skill skill = skillRepository.findById(1L).get();
         

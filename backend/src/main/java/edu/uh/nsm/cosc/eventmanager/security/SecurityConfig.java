@@ -49,6 +49,16 @@ public class SecurityConfig {
 
 		return http.build();
 	}
+	
+//	@Bean
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//		http
+//			.authorizeHttpRequests((authorize) -> authorize
+//				.anyRequest().permitAll()
+//			);
+//
+//		return http.build();
+//	}
 
 	@Bean
     public UserDetailsManager users(HttpSecurity http) throws Exception {
