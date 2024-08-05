@@ -1,6 +1,7 @@
 'use client'
 
 import moment from "moment";
+import { headers } from "next/headers";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
@@ -14,7 +15,7 @@ interface Event{
     state: {code:string, state: string} | null;
     zipcode: string;
     skills: string[] | null;
-    urgency: string[] | null;
+    urgency: string[];
     date: Date;
 }
 
@@ -28,26 +29,10 @@ const urgencyOptions = [
     { value: "med", label: "Medium"},
     { value: "high", label: "High"},
 ]
-const skillOptions = [
-    { value: "Database Management", label: "Database Management" },
-    { value: "IT Proficiency", label: "IT Proficiency" },
-    { value: "Website Management", label: "Website Management" },
-    { value: "Project Management", label: "Project Management" },
-    { value: "Time Management", label: "Time Management" },
-    { value: "Budgeting", label: "Budgeting" },
-    { value: "Communication", label: "Communication" },
-    { value: "Teamwork", label: "Teamwork" },
-    { value: "Problem-Solving", label: "Problem-Solving" },
-    { value: "Fundraising", label: "Fundraising" },
-    { value: "Grant Writing", label: "Grant Writing" },
-    { value: "Policy and Advocacy", label: "Policy and Advocacy" },
-    { value: "Leadership", label: "Leadership" },
-    { value: "Adaptability", label: "Adaptability" },
-    { value: "Ethical Awareness", label: "Ethical Awareness" },
-    { value: "Empathy", label: "Empathy" },
-    { value: "Cultural Competence", label: "Cultural Competence" },
-    { value: "Resilience", label: "Resilience" }
-];
+interface SkillOption {
+	id: number;
+	name: string;
+}
 
 async function getData(id: number) {
     // This is a new event will not have an id
@@ -66,22 +51,28 @@ async function getData(id: number) {
 
 export default /*async*/ function Event({ params }: { params: { id: number } }) {
     //const event = await getData(params.id);
-
-    const handleInputChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const{name, value, type, checked} = e.target;
-
-        setEvent(prevState => ({...prevState, [name]:type ==='checkbox'?checked:value}));
-    };
+	
+	const [event, setEvent] = useState<Event>({
+	        id:'',
+	        name:'',
+	        desc:'',
+	        address:'',
+	        address2:'',
+	        city:'',
+	        state: null,
+	        zipcode:'',
+	        skills:[],
+	        urgency:[],
+	        date: moment(new Date()).toDate(),
+	    });
 
     const [selectedSkillOptions, setSelectedSkillsOptoins] = useState<{value: string; label:string}[] | null>(null);
+    const [skillOptions, setSkillOptions] = useState<{id: number; name: string}[]>([]);
     const handleSkillChange = (selectedSkillOptions: {value:string; label:string}[] | null) => {
-        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value): null;
+        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : null;
         setSelectedSkillsOptoins(selectedSkillOptions);
         setEvent(prevState => ({...prevState, skills: selectedValues}));
-        saveEventData({ ...event, skills: selectedValues});
     };
-
-    
 
     const [selectedStateOption, setSelectedStateOption] = useState<{value: string; label:string} | null>(null);
     const [stateOptions, setStateOptions] = useState<{value: string; label: string}[]>([]);
@@ -94,44 +85,30 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
             setSelectedStateOption(null);
         }
         setEvent(prevState => ({...prevState, state}));
-        saveEventData({...event, state});
     };
 
     const [selectedUrgencyOption, setSelectedUrgencyOption] = useState<{value: string; label:string}[]| null>(null);
     const handleUrgencyChange = (selectedUrgencyOption: {value:string; label:string}[] | null) => {
-        const selectedValue = selectedUrgencyOption ? selectedUrgencyOption.map(option => option.value): null;
-        setSelectedUrgencyOption(urgencyOptions);
+        let selectedValue = selectedUrgencyOption.values;
+        setSelectedUrgencyOption(selectedUrgencyOption);
         setEvent(prevState => ({...prevState, urgency: selectedValue}));
-        saveEventData({...event, urgency: selectedValue});
     };
 
-    const saveEventData = async (updateEvent: Event) => {
-        try{
-            await fetch(`/api/users/${event.id}`, {
-                method:'PUT',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify(updateEvent),
-            });
-        } catch(error){
-            console.error("Error updating event data:", error);
-        }
-    }; 
+    async function saveEventData(e){
+        e.preventDefault();
+        await fetch(`/api/event/${event.id}`,{
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application.json',
+            },
+            body: JSON.stringify(event),
+        });
+    }
 
-    const [event, setEvent] = useState<Event>({
-        id:'',
-        name:'',
-        desc:'',
-        address:'',
-        address2:'',
-        city:'',
-        state: null,
-        zipcode:'',
-        skills:[],
-        urgency:[],
-        date: new Date()
-    });
+    const handleEventDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		const {name, value, type } = e.target;
+		setEvent({...event, date: moment(e.target.value).toDate()})
+	};
 
     useEffect(()=>{
         const fetchEvent = async () => {
@@ -145,7 +122,14 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
             const data: StateOption[] = await response.json();
             setStateOptions(data.map(state => ({value: state.code, label:state.state})));
         };
+		
+		const fetchSkills = async () => {
+            const response = await fetch('/api/skills');
+            const data: SkillOption[] = await response.json();
+            setSkillOptions(data.map(skill => ({ value: skill.id, label: skill.name })));
+        };
         
+		fetchSkills()
         fetchEvent();
         fetchStates();
     }, []);
@@ -164,7 +148,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventName" className="block text-sm font-medium leading-6 text-gray-900">Event Name</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input id="eventName" name="eventName" type="text" placeholder="Event Name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.name} onChange={handleInputChange}></input>
+                                    <input id="eventName" name="eventName" type="text" placeholder="Event Name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.name} onChange={e=>setEvent({...event, name: e.target.value})}></input>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +158,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventDescription" className="block text-sm font-medium leading-6 text-gray-900">Event Description</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <textarea id="eventDescription" name="eventDescription" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.desc} onChange={handleInputChange}></textarea>
+                                    <textarea id="eventDescription" name="eventDescription" rows={4} cols={50} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" value={event.desc} onChange={e=>setEvent({...event, desc: e.target.value})}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +168,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="address1" className="block text-sm font-medium leading-6 text-gray-900">Event Address</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address} onChange={handleInputChange}></input>
+                                    <input type="text" id="address1" name="address1" placeholder="Street number and name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address} onChange={e=>setEvent({...event, address: e.target.value})}></input>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +178,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="address2" className="block text-sm font-medium leading-6 text-gray-900">Event Address 2</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address2} onChange={handleInputChange}></input>
+                                    <input type="text" id="address2" name="address2" placeholder="Optional" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.address2} onChange={e=>setEvent({...event, address2: e.target.value})}></input>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +188,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">Event City</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.city} onChange={handleInputChange}></input>
+                                    <input type="text" id="city" name="city" placeholder="City name" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={event.city} onChange={e=>setEvent({...event, city: e.target.value})}></input>
                                 </div>
                             </div>
                             <div className="sm:col-span-1">
@@ -220,7 +204,7 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="zipcode" className="block text-sm font-medium leading-6 text-gray-900">Event Zip Code</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required value={event.zipcode} onChange={handleInputChange}></input>
+                                    <input type="text" id="zipcode" name="zipcode" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Zip Code" required value={event.zipcode} onChange={e=>setEvent({...event, zipcode: e.target.value})}></input>
                                 </div>
                             </div>
                         </div>
@@ -250,12 +234,12 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                     <label htmlFor="eventDate" className="block text-sm font-medium leading-6 text-gray-900">Date</label>
                                 </div>
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" id="date" name="date" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={moment(event.date).format("MM-DD-YYYY")} onChange={handleInputChange}></input>
+                                    <input type="date" id="date" name="date" maxLength={1} className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required value={moment(event.date).format('YYYY-MM-DD')} onChange={handleEventDateChange}></input>
                                 </div>
                             </div>
                         </div>
                         <div className="mt-4 bg-sky-400 text-white">
-                            <button className="p-2 w-full" onClick={saveEventData}>
+                            <button type="submit" className="p-2 w-full" onClick={saveEventData}>
                                 Save
                             </button>
                         </div>
