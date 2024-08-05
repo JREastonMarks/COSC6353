@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 import edu.uh.nsm.cosc.eventmanager.security.UserPrincipal;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 
 
 @Service
