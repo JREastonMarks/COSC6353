@@ -101,7 +101,6 @@ export default function Management() {
     const handleSexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setUser(prevState => ({ ...prevState, sex: value as 'male' | 'female' }));
-        saveUserData({ ...user, sex: value as 'male' | 'female' });
     };
 
     // Save user data to the backend
@@ -114,7 +113,12 @@ export default function Management() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        });
+        }).then(response => response.text())
+          .then((text) => {
+            if (text == "success") {
+                window.location.replace("/home")
+            }
+        })
     }
     
     useEffect(() => {

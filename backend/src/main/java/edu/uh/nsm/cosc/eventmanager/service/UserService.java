@@ -64,6 +64,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void updateUser(long userId, User user) {
+		User originalUser = userRepository.findById(userId);
+		user.setPassword(originalUser.getPassword());
 		user.setId(userId);
 		userRepository.save(user);
 		
