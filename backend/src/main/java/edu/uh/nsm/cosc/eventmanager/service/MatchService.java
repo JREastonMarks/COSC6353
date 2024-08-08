@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.uh.nsm.cosc.eventmanager.model.Match;
+import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.MatchRepository;
 
 @Service
@@ -26,4 +27,8 @@ public class MatchService {
     public void createMatch(Match match){
         matchRepository.save(match);
     }
+
+	public List<Match> getMatches(User user) {
+		return matchRepository.findByVolunteer(user);
+	}
 }

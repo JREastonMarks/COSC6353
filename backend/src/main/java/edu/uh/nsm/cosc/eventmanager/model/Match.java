@@ -29,6 +29,8 @@ public class Match implements Serializable{
     @Transient
     boolean match;
     
+    private Integer rating;
+    
     public long getId(){
         return id;
     }
@@ -56,6 +58,14 @@ public class Match implements Serializable{
     public boolean getMatch(){
         return match;
     }
+    
+    public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
 
     public void setMatch(List<Skill> volSkills, List<Skill> evSkills){
         match = false;
@@ -66,4 +76,6 @@ public class Match implements Serializable{
             }
         }
     }
+
+	
 }

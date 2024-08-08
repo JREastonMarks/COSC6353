@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.uh.nsm.cosc.eventmanager.model.Notification;
+import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.NotificationRepository;
 
 @Service
@@ -28,6 +29,12 @@ public class NotificationService {
 	public void createNotification(Notification notification) {
 		notificationRepository.save(notification);
 		
+	}
+
+	public List<Notification> getNotifications(User user) {
+		List<Notification> notifications = notificationRepository.findByReceiver(user);
+		notifications.addAll(notificationRepository.findBySender(user));
+		return notifications;
 	}
 
 }

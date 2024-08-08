@@ -45,13 +45,6 @@ export default function Register() {
         await fetch("/api/user/register", {
             method: "POST",
             body: registerData
-        // }).then(response => {
-        //     if (response.redirected) {
-        //       window.location.replace(response.url); 
-        //       return;
-        //     }
-            
-        // })
         }).then(response => response.text())
         .then((text) => {
             if (text == "success") {

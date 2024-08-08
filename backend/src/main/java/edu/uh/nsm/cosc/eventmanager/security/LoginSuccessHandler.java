@@ -28,7 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			redirectStrategy.sendRedirect(request, response, "/management");
 		
 		} else {
-			redirectStrategy.sendRedirect(request, response, "/notifiations");
+			redirectStrategy.sendRedirect(request, response, "/home");
 		}
 	}
 	

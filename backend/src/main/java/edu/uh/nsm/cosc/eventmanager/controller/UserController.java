@@ -27,7 +27,9 @@ public class UserController {
 
 	@PutMapping(path="/{userId}")
 	String updateUser(@PathVariable(required=true) long userId, @Validated @RequestBody User user) {
+		
 		userService.updateUser(userId, user);
+		
 		return "success";
 	}
 	
