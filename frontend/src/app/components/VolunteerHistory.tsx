@@ -6,6 +6,7 @@ interface HistoryProps {
     volunteer: User;
     event: Event;
     status: string;
+    performance: string[] | null;
 }
 
 interface StateOption{
@@ -33,7 +34,7 @@ interface Event {
     date: string;
 }
 
-const History: React.FC<HistoryProps> = ({ volunteer, event, status }) => {
+const History: React.FC<HistoryProps> = ({ volunteer, event, status, performance }) => {
     return (
       <div className="mx-full">
         <div className="bg-white rounded shadow">
@@ -84,6 +85,9 @@ const History: React.FC<HistoryProps> = ({ volunteer, event, status }) => {
           <div className="mb-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-12">{event.desc}</div>
           </div>
+          <div className="mb-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-12">{performance}</div>
+          </div>
         </div>
       </div>
     );
@@ -111,7 +115,8 @@ export default function VolunteerHistory(){
             urgency: [],
             date: ''
         },
-        status: ''    
+        status: '',
+        performance: []    
     }
     ]);
     
@@ -182,7 +187,7 @@ export default function VolunteerHistory(){
                             <br></br>when you participated in an event, it'll be shown here.</p>
                         ) : (
                             histories.map((history, index) => (
-                            <History key={index} volunteer={history.volunteer} event={history.event} status={history.status} />
+                            <History key={index} volunteer={history.volunteer} event={history.event} status={history.status} performance={history.performance}/>
                         ))
                         )}
                     </div>

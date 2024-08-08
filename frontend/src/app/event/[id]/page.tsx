@@ -1,22 +1,24 @@
 'use client'
 
-import moment from "moment";
+import moment from 'moment';
 import { headers } from "next/headers";
-import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 
-interface Event{
+// Define interfaces
+interface EventProps {
     id: string;
     name: string;
     desc: string;
     address: string;
     address2: string;
     city: string;
-    state: {code:string, state: string} | null;
+    state: { code: string, state: string } | null;
     zipcode: string;
     skills: string[] | null;
     urgency: string[];
     date: Date;
+    volunteers: Volunteers[];
 }
 
 interface StateOption {
@@ -26,114 +28,176 @@ interface StateOption {
 
 const urgencyOptions = [
     { value: "low", label: "Low" },
-    { value: "med", label: "Medium"},
-    { value: "high", label: "High"},
-]
+    { value: "med", label: "Medium" },
+    { value: "high", label: "High" },
+];
+
+const ratingOptions = [
+    { value: "Bad", label: "Bad" },
+    { value: "Fine", label: "Fine" },
+    { value: "Great", label: "Great" },
+];
+
 interface SkillOption {
-	id: number;
-	name: string;
+    id: number;
+    name: string;
 }
 
+interface Volunteers {
+    id: string;
+    firstName: string;
+    middleInitial: string;
+    lastName: string;
+}
+
+interface History {
+    volunteerId: string;
+    performance: string | null;
+}
+
+// API calls
 async function getData(id: number) {
-    // This is a new event will not have an id
-    if(id == 0) {
-        // Return an empty event object
+    if (id === 0) {
+        return {
+            id: '',
+            name: '',
+            desc: '',
+            address: '',
+            address2: '',
+            city: '',
+            state: null,
+            zipcode: '',
+            skills: [],
+            urgency: [],
+            date: new Date(),
+            volunteers: [],
+        };
     } else {
-        const res = await fetch('/event/' + id)
-
-        if(!res.ok) {
-            throw new Error('Error obtaining data for event')
+        const res = await fetch(`/api/event/${id}`);
+        if (!res.ok) {
+            throw new Error('Error obtaining data for event');
         }
-        
-        return res.json
+        return res.json();
     }
 }
 
-export default /*async*/ function Event({ params }: { params: { id: number } }) {
-    //const event = await getData(params.id);
-	
-	const [event, setEvent] = useState<Event>({
-	        id:'',
-	        name:'',
-	        desc:'',
-	        address:'',
-	        address2:'',
-	        city:'',
-	        state: null,
-	        zipcode:'',
-	        skills:[],
-	        urgency:[],
-	        date: moment(new Date()).toDate(),
-	    });
+const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
+    const [event, setEvent] = useState<EventProps>({
+        id: '',
+        name: '',
+        desc: '',
+        address: '',
+        address2: '',
+        city: '',
+        state: null,
+        zipcode: '',
+        skills: [],
+        urgency: [],
+        date: new Date(),
+        volunteers: [],
+    });
 
-    const [selectedSkillOptions, setSelectedSkillsOptoins] = useState<{value: string; label:string}[] | null>(null);
-    const [skillOptions, setSkillOptions] = useState<{id: number; name: string}[]>([]);
-    const handleSkillChange = (selectedSkillOptions: {value:string; label:string}[] | null) => {
-        const selectedValues = selectedSkillOptions ? selectedSkillOptions.map(option => option.value) : null;
-        setSelectedSkillsOptoins(selectedSkillOptions);
-        setEvent(prevState => ({...prevState, skills: selectedValues}));
-    };
+    const [skillOptions, setSkillOptions] = useState<{ value: string; label: string }[]>([]);
+    const [selectedSkillOptions, setSelectedSkillOptions] = useState<{ value: string; label: string }[] | null>(null);
+    const [stateOptions, setStateOptions] = useState<{ value: string; label: string }[]>([]);
+    const [selectedStateOption, setSelectedStateOption] = useState<{ value: string; label: string } | null>(null);
+    const [selectedUrgencyOption, setSelectedUrgencyOption] = useState<{ value: string; label: string } | null>(null);
+    const [volunteerHistories, setVolunteerHistories] = useState<History[]>([]);
 
-    const [selectedStateOption, setSelectedStateOption] = useState<{value: string; label:string} | null>(null);
-    const [stateOptions, setStateOptions] = useState<{value: string; label: string}[]>([]);
-    const handleStateChange = async (selectedStateOption:{value: string; label: string} | null) => {
-        let state = null;
-        if (selectedStateOption){
-            state = {code: selectedStateOption.value, state: selectedStateOption.label};
-            setSelectedStateOption(selectedStateOption);
-        } else{
-            setSelectedStateOption(null);
-        }
-        setEvent(prevState => ({...prevState, state}));
-    };
-
-    const [selectedUrgencyOption, setSelectedUrgencyOption] = useState<{value: string; label:string}[]| null>(null);
-    const handleUrgencyChange = (selectedUrgencyOption: {value:string; label:string}[] | null) => {
-        let selectedValue = selectedUrgencyOption.values;
-        setSelectedUrgencyOption(selectedUrgencyOption);
-        setEvent(prevState => ({...prevState, urgency: selectedValue}));
-    };
-
-    async function saveEventData(e){
-        e.preventDefault();
-        await fetch(`/api/event/${event.id}`,{
-            method:'PUT',
-            headers: {
-                'Content-Type': 'application.json',
-            },
-            body: JSON.stringify(event),
-        });
-    }
-
-    const handleEventDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const {name, value, type } = e.target;
-		setEvent({...event, date: moment(e.target.value).toDate()})
-	};
-
-    useEffect(()=>{
+    useEffect(() => {
         const fetchEvent = async () => {
-            const response = await fetch('/api/event/1');
-            const data = await response.json();
+            const data = await getData(params.id);
             setEvent(data);
+            if (data.state) {
+                setSelectedStateOption({ value: data.state.code, label: data.state.state });
+            }
+            if (data.skills) {
+                setSelectedSkillOptions(data.skills.map(skill => ({ value: skill, label: skill })));
+            }
+            if (data.urgency.length) {
+                setSelectedUrgencyOption({ value: data.urgency[0], label: data.urgency[0] });
+            }
         };
-    
+
         const fetchStates = async () => {
             const response = await fetch('/api/states');
             const data: StateOption[] = await response.json();
-            setStateOptions(data.map(state => ({value: state.code, label:state.state})));
+            setStateOptions(data.map(state => ({ value: state.code, label: state.state })));
         };
-		
-		const fetchSkills = async () => {
+
+        const fetchSkills = async () => {
             const response = await fetch('/api/skills');
             const data: SkillOption[] = await response.json();
-            setSkillOptions(data.map(skill => ({ value: skill.id, label: skill.name })));
+            setSkillOptions(data.map(skill => ({ value: skill.id.toString(), label: skill.name })));
         };
-        
-		fetchSkills()
+
         fetchEvent();
         fetchStates();
-    }, []);
-    
+        fetchSkills();
+    }, [params.id]);
+
+    const handleSkillChange = (selectedOptions: { value: string; label: string }[] | null) => {
+        setSelectedSkillOptions(selectedOptions);
+        setEvent(prev => ({
+            ...prev,
+            skills: selectedOptions ? selectedOptions.map(option => option.value) : []
+        }));
+    };
+
+    const handleStateChange = (selectedOption: { value: string; label: string } | null) => {
+        setSelectedStateOption(selectedOption);
+        setEvent(prev => ({
+            ...prev,
+            state: selectedOption ? { code: selectedOption.value, state: selectedOption.label } : null
+        }));
+    };
+
+    const handleUrgencyChange = (selectedOption: { value: string; label: string } | null) => {
+        setSelectedUrgencyOption(selectedOption);
+        setEvent(prev => ({
+            ...prev,
+            urgency: selectedOption ? [selectedOption.value] : []
+        }));
+    };
+
+    const handleEventDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEvent(prev => ({
+            ...prev,
+            date: moment(e.target.value).toDate()
+        }));
+    };
+
+    const handleRatingChange = (volunteerId: string, selectedRatingOption: { value: string; label: string } | null) => {
+        setVolunteerHistories(prev => {
+            const existing = prev.find(hist => hist.volunteerId === volunteerId);
+            if (existing) {
+                existing.performance = selectedRatingOption ? selectedRatingOption.value : null;
+                return [...prev];
+            } else {
+                return [...prev, { volunteerId, performance: selectedRatingOption ? selectedRatingOption.value : null }];
+            }
+        });
+    };
+
+    const saveEventData = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await fetch(`/api/event/${event.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(event),
+        });
+
+        await fetch(`/api/histories`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(volunteerHistories),
+        });
+    };
+
     return (
         <div className="container mx-auto p-16">
             <div className="mx-auto">
@@ -238,9 +302,34 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 bg-sky-400 text-white">
-                            <button type="submit" className="p-2 w-full" onClick={saveEventData}>
-                                Save
+                        <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                            <div className="sm:col-span-1">
+                                <div className="mt-2">
+                                    <label htmlFor="eventDate" className="block text-sm font-medium leading-6 text-gray-900">Date</label>
+                                </div>
+                                <div className="mt-2 space-y-4">
+                                    {event.volunteers.map(volunteer => (
+                                        <div key={volunteer.id} className="flex items-center space-x-4">
+                                            <div>
+                                                {volunteer.firstName} {volunteer.middleInitial} {volunteer.lastName}
+                                            </div>
+                                            <div>
+                                                <Select
+                                                    options={ratingOptions}
+                                                    onChange={(option) => handleRatingChange(volunteer.id, option)}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 text-right">
+                            <button
+                                type="submit"
+                                className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                            >
+                                Save Changes
                             </button>
                         </div>
                     </form>
@@ -248,4 +337,6 @@ export default /*async*/ function Event({ params }: { params: { id: number } }) 
             </div>
         </div>
     );
-}
+};
+
+export default EventsPage;

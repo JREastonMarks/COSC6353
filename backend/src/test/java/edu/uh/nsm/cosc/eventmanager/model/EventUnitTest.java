@@ -2,6 +2,7 @@ package edu.uh.nsm.cosc.eventmanager.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
@@ -54,6 +55,7 @@ public class EventUnitTest{
         assertThat(event.getSkills().getFirst().getName()).isEqualTo("Budgeting");
         assertThat(event.getUrgency()).isEqualTo("Low");
         assertThat(event.getEventdate()).isEqualTo(df.parseObject("2024-07-04"));
+
     }
 
     @Test

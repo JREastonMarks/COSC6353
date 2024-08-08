@@ -55,6 +55,7 @@ public class HistoryServiceIntegrationTest {
 		history.setVolunteer(volunteer);
 		history.setEvent(event);
 		history.setStatus("Active");
+		history.setPerformance("Excellent");
 
 		historyService.createHistory(history);
 

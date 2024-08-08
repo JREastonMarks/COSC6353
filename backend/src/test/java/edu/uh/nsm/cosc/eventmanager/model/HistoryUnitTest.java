@@ -23,11 +23,13 @@ public class HistoryUnitTest {
         history.setEvent(event);
 
         history.setStatus("Finished");
+        history.setPerformance("Excellent");
 
         assertThat(history.getId()).isEqualTo(1L);
         assertThat(history.getVolunteer().getId()).isEqualTo(2L);
         assertThat(history.getEvent().getId()).isEqualTo(3L);
         assertThat(history.getStatus()).isEqualTo("Finished");
+        assertThat(history.getPerformance()).isEqualTo("Excellent");
     }
     
 }

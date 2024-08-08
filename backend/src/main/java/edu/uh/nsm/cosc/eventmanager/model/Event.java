@@ -56,6 +56,11 @@ public class Event implements Serializable{
 	private
     Date eventdate;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Size(min=1, message="Event volunteers must not be null")
+    List<User> volunteers;
+
+
     public long getId(){
         return id;
     }
@@ -145,4 +150,12 @@ public class Event implements Serializable{
 	public void setEventdate(Date eventdate) {
 		this.eventdate = eventdate;
 	}
+
+    public List<User> getVolunteers(){
+        return volunteers;
+    }
+    
+    public void setVolunteers(List<User> volunteers){
+        this.volunteers=volunteers;
+    }
 }

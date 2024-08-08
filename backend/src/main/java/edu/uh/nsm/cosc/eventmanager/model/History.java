@@ -27,6 +27,8 @@ public class History implements Serializable {
     @Size(min=1, max=50, message="Participation status must be greater than 1 and less than 50 characters")
     String status;
 
+    String performance;
+
     public long getId() {
         return id;
     }
@@ -59,4 +61,11 @@ public class History implements Serializable {
         this.status = status;
     }
     
+    public String getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(String performance) {
+        this.performance = performance;
+    }
 }

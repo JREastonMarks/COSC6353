@@ -45,6 +45,7 @@ public class HistoryRepositoryIntegrationTest {
 		//history.setVolunteer(volunteer);
 		history.setEvent(event);
 		history.setStatus("Active");
+		history.setPerformance("Excellent");
 
 		historyRepository.save(history);
 
