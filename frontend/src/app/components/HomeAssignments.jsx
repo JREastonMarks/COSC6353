@@ -14,9 +14,24 @@ export default function HomeAssignments(){
     if (!data) return null
 
     return(
-        <div>
-            You currently have {data.length} assignments.
-        </div>
+        <table class="table-fixed" style={{width: '100%'}}>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Skill</th>
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((match) => {
+                    <tr>
+                        <td>{match.event.name}</td>
+                        <td>{match.event.eventdate}</td>
+                        <td>{match.skill}</td>
+                    </tr>
+                })}
+            </tbody>
+        </table>
     );
     return (<div>Hello 2</div>);
 }
