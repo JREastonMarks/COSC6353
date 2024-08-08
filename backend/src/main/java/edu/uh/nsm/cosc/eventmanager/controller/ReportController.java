@@ -40,10 +40,7 @@ public class ReportController {
 	}
 	
 	@GetMapping(path="/volunteerReport")
-	public ResponseEntity<InputStreamResource> getVolunteerReport(@RequestParam("format") String format,  @RequestParam("userId") long userId, HttpServletResponse response) throws Exception {
-		MediaType contentType = MediaType.ALL;
-		InputStream in = null;
-	
+	public void getVolunteerReport(@RequestParam("format") String format,  @RequestParam("userId") long userId, HttpServletResponse response) throws Exception {
 		if(format.equals("PDF")) {
 			response.setContentType(MediaType.APPLICATION_PDF_VALUE);
 			response.setHeader("Content-disposition", "attachment; filename=report.pdf");
@@ -55,9 +52,5 @@ public class ReportController {
 		} else {
 			throw new Exception("Unknown format");
 		}
-		
-		return ResponseEntity.ok()
-			      .contentType(contentType)
-			      .body(new InputStreamResource(in));
 	}
 }

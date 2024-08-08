@@ -2,11 +2,11 @@ DELETE FROM event_skills;
 DELETE FROM history;
 DELETE FROM eventmatch;
 DELETE FROM event;
-DELETE FROM states;
 DELETE FROM notification;
 DELETE FROM user_skills;
 DELETE FROM skill;
 DELETE FROM user;
+DELETE FROM states;
 UPDATE notification_seq SET next_val=1;
 
 INSERT INTO user (id, first_name, middle_initial, last_name, birthdate, cell_phone, sex, work_phone, registered) VALUES (1, "firstS", "S", "lastS", '2020-01-01', '603-555-5555', 0, '781-555-5555', true);

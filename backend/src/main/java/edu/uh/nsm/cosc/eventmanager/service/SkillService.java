@@ -9,7 +9,7 @@ import edu.uh.nsm.cosc.eventmanager.repository.SkillRepository;
 
 @Service
 public class SkillService {
-	SkillRepository skillRepository;
+	private SkillRepository skillRepository;
 	
 	public SkillService(SkillRepository skillRepository) {
 		this.skillRepository = skillRepository;

@@ -15,7 +15,9 @@ import org.springframework.test.context.jdbc.Sql;
 import edu.uh.nsm.cosc.eventmanager.model.Event;
 import edu.uh.nsm.cosc.eventmanager.model.Skill;
 import edu.uh.nsm.cosc.eventmanager.model.States;
+import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.SkillRepository;
+import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 
 @SpringBootTest
 @Sql("/test-events.sql")
@@ -26,6 +28,9 @@ public class EventServiceIntegrationTest{
     
     @Autowired
     private SkillRepository skillRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void contextLoads() throws Exception{
@@ -38,6 +43,15 @@ public class EventServiceIntegrationTest{
 
         assertThat(events.size()).isEqualTo(1);
     }
+
+    @Test
+    void testUserEvents(){
+    	User user = userRepository.findById(1L);
+        List<Event> events = eventService.getEvents(user);
+
+        assertThat(events.size()).isEqualTo(1);
+    }
+    
 
     @Test
     void testEvent(){
@@ -60,6 +74,7 @@ public class EventServiceIntegrationTest{
         event.setZipcode("12345");
         event.setSkills(Arrays.asList(skill));
         event.setUrgency("Low");
+        event.setAdministrator(userRepository.findById(1L));
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             Date date = df.parse("2024-07-23");

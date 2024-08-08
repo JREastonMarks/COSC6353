@@ -2,11 +2,11 @@ DELETE FROM event_skills;
 DELETE FROM history;
 DELETE FROM eventmatch;
 DELETE FROM event;
-DELETE FROM states;
 DELETE FROM notification;
 DELETE FROM user_skills;
 DELETE FROM skill;
 DELETE FROM user;
+DELETE FROM states;
 
 UPDATE history_seq SET next_val=1 WHERE next_val>0;
 

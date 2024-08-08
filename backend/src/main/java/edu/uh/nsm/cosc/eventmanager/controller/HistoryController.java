@@ -6,7 +6,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +21,9 @@ public class HistoryController {
     private HistoryService historyService;
     private UserService userService;
 
-    public HistoryController(HistoryService historyService) {
+    public HistoryController(HistoryService historyService, UserService userService) {
         this.historyService = historyService;
+        this.userService = userService;
     }
 
     @GetMapping(path="/histories")
@@ -35,10 +35,5 @@ public class HistoryController {
     @GetMapping(path="/history/{historyId}")
     History viewHistory(@PathVariable (required=true) long historyId) {
         return historyService.getHistory(historyId);
-    }
-    
-    @PostMapping
-    void createHistory(History history){
-        historyService.createHistory(history);
     }
 }

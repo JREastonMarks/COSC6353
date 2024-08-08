@@ -59,7 +59,7 @@ public class Event implements Serializable{
     @Size(min=1, message="Event volunteers must not be null")
     List<User> volunteers;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     User administrator;
 
 

@@ -44,6 +44,14 @@ public class MatchServiceIntegrationTest {
 
         assertThat(matches.size()).isEqualTo(1);
     }
+    
+    @Test
+    void testUserMatches(){
+    	User volunteer = userRepository.findById(1L);
+        List<Match> matches = matchService.getMatches(volunteer);
+
+        assertThat(matches.size()).isEqualTo(1);
+    }
 
     @Test 
     void testMatch(){

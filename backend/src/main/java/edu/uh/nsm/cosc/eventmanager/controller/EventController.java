@@ -34,11 +34,6 @@ public class EventController{
         return eventService.getEvents(user);
     }
 
-    @GetMapping(path="/events")
-    List<Event> events(){
-        return eventService.getEvents();
-    }
-
     @GetMapping(path="/event/{eventId}")
     Event event(@PathVariable(required=true) long eventId){
         return eventService.getEvent(eventId);

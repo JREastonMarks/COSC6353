@@ -45,6 +45,14 @@ public class HistoryServiceIntegrationTest {
 		
 		assertThat(history.getId()).isEqualTo(1L);
 	}
+	
+	@Test
+	void testUserHistory() {
+		User user = userRepository.findById(10L);
+		List<History> histories = historyService.getHistories(user);
+		
+		assertThat(histories.size()).isEqualTo(1);
+	}
 
 	@Test
 	void createHistory(){
