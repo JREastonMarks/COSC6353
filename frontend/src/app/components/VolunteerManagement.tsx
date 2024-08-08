@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 interface MatchProps{
-    
     volunteer: User;
     event: Event;
     match: boolean;

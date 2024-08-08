@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.uh.nsm.cosc.eventmanager.model.History;
-import edu.uh.nsm.cosc.eventmanager.model.Notification;
 import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.HistoryRepository;
 

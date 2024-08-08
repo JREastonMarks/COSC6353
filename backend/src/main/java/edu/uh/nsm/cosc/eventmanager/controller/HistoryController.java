@@ -22,12 +22,13 @@ public class HistoryController {
     private HistoryService historyService;
     private UserService userService;
 
-    public HistoryController(HistoryService historyService) {
+    public HistoryController(HistoryService historyService, UserService userService) {
         this.historyService = historyService;
+        this.userService = userService;
     }
 
     @GetMapping(path="/histories")
-    List<History> messages(@AuthenticationPrincipal UserDetails userDetails) {
+    List<History> viewHistories(@AuthenticationPrincipal UserDetails userDetails) {
 		User user = userService.findUserByUsername(userDetails.getUsername());
 		return historyService.getHistories(user);
     }

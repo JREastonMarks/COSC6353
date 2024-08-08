@@ -81,7 +81,67 @@ async function getData(id: number) {
     }
 }
 
-const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
+const Events: React.FC<EventProps> = ({ id, name, desc, address, address2, city, state, zipcode, skills, urgency, date, volunteers }) => {
+    return (
+      <div className="mx-full">
+        <div className="bg-white rounded shadow">
+          <div className="py-8 font-bold text-black text-center text-md tracking-widest uppercase">
+              {name} - ID: {id}
+          </div>
+          <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-1 font-bold text-left">
+                  Description
+              </div>
+          </div>
+          <div className="mb-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-12">{desc}</div>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-1 font-bold text-right">
+                  At:
+            </div>
+            <div className="sm:col-span-2">{address}</div>
+            <div className="sm:col-span-2">{address2}</div>
+            <div className="sm:col-span-2">{city}, {state?.state} {zipcode}</div>
+          </div>
+          <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-1 font-bold text-right">
+                  Date:
+              </div>
+              <div className="sm:col-span-2">{new Date(date).toLocaleString()}</div>
+          </div>
+          <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-1 font-bold text-right">
+                  Skills:
+              </div>
+              <div className="sm:col-span-2">{skills?.join(', ')}</div>
+          </div>
+          <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-1 font-bold text-right">
+                  Urgency:
+              </div>
+              <div className="sm:col-span-2">{urgency}</div>
+          </div>
+            <div className="mt-0 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-1 font-bold text-right">
+                  Volunteers:
+              </div>
+            <div className="sm:col-span-2">
+                {volunteers.map(volunteer => (
+                <div key={volunteer.id} className="flex items-center space-x-4">
+                    <div>
+                        {volunteer.firstName} {volunteer.middleInitial} {volunteer.lastName}
+                    </div>
+                </div>
+                ))}
+            </div>
+            </div>
+        </div>
+    </div>
+    );
+  };
+
+  export default function EventsPage() {
     const [event, setEvent] = useState<EventProps>({
         id: '',
         name: '',
@@ -96,7 +156,8 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
         date: new Date(),
         volunteers: [],
     });
-
+    const [eventId, setEventId] = useState('');
+    const [events, setEvents] = useState<EventProps[]>([]);
     const [skillOptions, setSkillOptions] = useState<{ value: string; label: string }[]>([]);
     const [selectedSkillOptions, setSelectedSkillOptions] = useState<{ value: string; label: string }[] | null>(null);
     const [stateOptions, setStateOptions] = useState<{ value: string; label: string }[]>([]);
@@ -105,18 +166,10 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
     const [volunteerHistories, setVolunteerHistories] = useState<History[]>([]);
 
     useEffect(() => {
-        const fetchEvent = async () => {
-            const data = await getData(params.id);
-            setEvent(data);
-            if (data.state) {
-                setSelectedStateOption({ value: data.state.code, label: data.state.state });
-            }
-            if (data.skills) {
-                setSelectedSkillOptions(data.skills.map(skill => ({ value: skill, label: skill })));
-            }
-            if (data.urgency.length) {
-                setSelectedUrgencyOption({ value: data.urgency[0], label: data.urgency[0] });
-            }
+        const fetchEvents = async () => {
+            const response = await fetch('/api/events');
+            const data = await response.json();
+            setEvents(data);
         };
 
         const fetchStates = async () => {
@@ -131,10 +184,10 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
             setSkillOptions(data.map(skill => ({ value: skill.id.toString(), label: skill.name })));
         };
 
-        fetchEvent();
+        fetchEvents();
         fetchStates();
         fetchSkills();
-    }, [params.id]);
+    }, []);
 
     const handleSkillChange = (selectedOptions: { value: string; label: string }[] | null) => {
         setSelectedSkillOptions(selectedOptions);
@@ -178,33 +231,151 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
             }
         });
     };
+    
+    
 
-    const saveEventData = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await fetch(`/api/event/${event.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(event),
-        });
+    const fetchEventById = async () => {
+        if (!eventId) {
+            console.error('Event ID is required');
+            return;
+        }
 
-        await fetch(`/api/histories`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(volunteerHistories),
-        });
+        const response = await fetch(`/api/event/${eventId}`);
+        if (response.ok) {
+            const eventData = await response.json();
+            setEvent(eventData);
+            // Optionally, fetch volunteer histories if needed
+        } else {
+            console.error('Failed to fetch event:', response.statusText);
+        }
     };
+
+    const saveEventData = async (e) => {
+        e.preventDefault();
+
+        if (!event) {
+            console.error('No event data available');
+            return;
+        }
+
+        if (event.id) {
+            // Updating an existing event
+            const response = await fetch(`/api/event/${event.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(event),
+            });
+
+            if (response.ok) {
+                // Update volunteer histories
+                await fetch('/api/histories', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(volunteerHistories),
+                });
+
+                console.log('Event updated and histories updated successfully');
+            } else {
+                console.error('Failed to update event:', response.statusText);
+            }
+        } else {
+            // Creating a new event
+            const response = await fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(event),
+            });
+
+            if (response.ok) {
+                const createdEvent = await response.json();
+
+                // Update volunteer histories with the new event ID
+                const updatedVolunteerHistories = volunteerHistories.map(history => ({
+                    ...history,
+                    eventId: createdEvent.id, // Link histories to the new event
+                }));
+
+                // Saving volunteer histories
+                await fetch('/api/histories', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedVolunteerHistories),
+                });
+
+                console.log('Event created and histories saved successfully');
+            } else {
+                console.error('Failed to create event:', response.statusText);
+            }
+        }
+    };
+
 
     return (
         <div className="container mx-auto p-16">
             <div className="mx-auto">
                 <div className="bg-white rounded shadow">
-                    <form className="bg-grey-lightest px-16 py-10">
+                    <div className="bg-grey-lightest px-16 py-10">
                         <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
-                            Event Management - {params.id}
+                            Events - ({events.length})
+                        </div>
+                    </div>
+                    <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-16">
+                        {events.length === 0 ? (
+                            <p className="text-gray-500 text-center">NO EVENTS YET!</p>
+                        ) : (
+                            events.map((event, index) => (
+                            <Events key={index} 
+                            id={event.id} 
+                            name={event.name} 
+                            desc={event.desc} 
+                            address={event.address} 
+                            address2={event.address2} 
+                            city={event.city}
+                            state={event.state}
+                            zipcode={event.zipcode}
+                            urgency={event.urgency}
+                            skills={event.skills}
+                            date={event.date}
+                            volunteers={event.volunteers}
+                            />
+                            ))
+                        )}
+                    </div>
+                <div className="bg-grey-lightest px-16 py-10">
+                <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-16">
+                    <div className="sm:col-span-2">
+                        <div className="mt-2">
+                            <label htmlFor="eventId" className="block text-sm font-medium leading-6 text-gray-900">
+                                Fetch Event by Event ID
+                            </label>
+                        </div>
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                        <input
+                            id="eventId"
+                            name="eventId"
+                            type="text"
+                            placeholder="Event ID"
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            value={eventId}
+                            onChange={e => setEventId(e.target.value)}
+                        />
+                    </div>
+                    <button type="button" onClick={fetchEventById} className="mt-2 p-2 bg-blue-500 text-white">
+                        Fetch Event
+                    </button>
+                    </div>
+                    {event && (
+                    <form  onClick={saveEventData}>
+                        <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
+                            Event Management - {event.id}
                         </div>
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-2">
@@ -305,7 +476,7 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
                         <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-1">
                                 <div className="mt-2">
-                                    <label htmlFor="eventDate" className="block text-sm font-medium leading-6 text-gray-900">Date</label>
+                                    <label htmlFor="eventDate" className="block text-sm font-medium leading-6 text-gray-900">Volunteers</label>
                                 </div>
                                 <div className="mt-2 space-y-4">
                                     {event.volunteers.map(volunteer => (
@@ -324,19 +495,154 @@ const EventsPage: React.FC<{ params: { id: number } }> = ({ params }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-4 text-right">
-                            <button
-                                type="submit"
-                                className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                            >
-                                Save Changes
+                        <div className="mt-4 bg-sky-400 text-white">
+                            <button type="submit" className="p-2 w-full">
+                                Save
                             </button>
                         </div>
                     </form>
+                    )}
+                </div>
+                </div>
+                    <form className="bg-grey-lightest px-16 py-10">
+                        <div className="py-8 font-bold text-black text-center text-xl tracking-widest uppercase">
+                            Create New Event
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                                Event Name
+                            </label>
+                            <input
+                                id="name"
+                                type="text"
+                                placeholder="Enter event name"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.name}
+                                onChange={e => setEvent({ ...event, name: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="desc">
+                                Description
+                            </label>
+                            <textarea
+                                id="desc"
+                                placeholder="Enter event description"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.desc}
+                                onChange={e => setEvent({ ...event, desc: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
+                                Address
+                            </label>
+                            <input
+                                id="address"
+                                type="text"
+                                placeholder="Enter address"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.address}
+                                onChange={e => setEvent({ ...event, address: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address2">
+                                Address 2
+                            </label>
+                            <input
+                                id="address2"
+                                type="text"
+                                placeholder="Apartment, suite, unit, etc."
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.address2}
+                                onChange={e => setEvent({ ...event, address2: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
+                                City
+                            </label>
+                            <input
+                                id="city"
+                                type="text"
+                                placeholder="Enter city"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.city}
+                                onChange={e => setEvent({ ...event, city: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="state">
+                                State
+                            </label>
+                            <Select
+                                id="state"
+                                value={selectedStateOption}
+                                onChange={handleStateChange}
+                                options={stateOptions}
+                                placeholder="Select state"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="zipcode">
+                                Zip Code
+                            </label>
+                            <input
+                                id="zipcode"
+                                type="text"
+                                placeholder="Enter zip code"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={event.zipcode}
+                                onChange={e => setEvent({ ...event, zipcode: e.target.value })}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="skills">
+                                Skills
+                            </label>
+                            <Select
+                                id="skills"
+                                isMulti
+                                value={selectedSkillOptions}
+                                onChange={handleSkillChange}
+                                options={skillOptions}
+                                placeholder="Select skills"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="urgency">
+                                Urgency
+                            </label>
+                            <Select
+                                id="urgency"
+                                value={selectedUrgencyOption}
+                                onChange={handleUrgencyChange}
+                                options={urgencyOptions}
+                                placeholder="Select urgency"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+                                Event Date
+                            </label>
+                            <input
+                                id="date"
+                                type="date"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={moment(event.date).format('YYYY-MM-DD')}
+                                onChange={handleEventDateChange}
+                            />
+                        </div>
+                        <div className="mt-4 bg-sky-400 text-white">
+                            <button type="submit" className="p-2 w-full" onClick={saveEventData}>
+                                Create Event
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
     );
-};
-
-export default EventsPage;
+}
