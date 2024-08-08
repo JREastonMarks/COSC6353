@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.uh.nsm.cosc.eventmanager.model.Event;
+import edu.uh.nsm.cosc.eventmanager.model.User;
 import edu.uh.nsm.cosc.eventmanager.repository.EventRepository;
 
 @Service
@@ -26,4 +27,8 @@ public class EventService{
     public void createEvent(Event event){
         eventRepository.save(event);
     }
+
+	public List<Event> getEvents(User user) {
+		return eventRepository.findByAdministrator(user);
+	}
 }

@@ -15,11 +15,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api")
-public class ResultController {
+public class ReportController {
 	
 	ReportService reportService;
 	
-	public ResultController(ReportService reportService) {
+	public ReportController(ReportService reportService) {
 		this.reportService = reportService;
 	}
 	
@@ -27,11 +27,11 @@ public class ResultController {
 	public void getEventReport(@RequestParam("format") String format, @RequestParam("eventId") long eventId, HttpServletResponse response) throws Exception {
 		if(format.equals("PDF")) {
 			response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-			response.setHeader("Content-disposition", "attachment; filename=test.pdf");
+			response.setHeader("Content-disposition", "attachment; filename=report.pdf");
 			reportService.generateEventPDFReportStream(response.getOutputStream(), eventId);
 		} else if (format.equals("CSV")) {
 			response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-			response.setHeader("Content-disposition", "attachment; filename=test.csv");
+			response.setHeader("Content-disposition", "attachment; filename=report.csv");
 			reportService.generateEventCSVReportStream(response.getWriter(), eventId);			
 		} else {
 			throw new Exception("Unknown format");
@@ -46,11 +46,11 @@ public class ResultController {
 	
 		if(format.equals("PDF")) {
 			response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-			response.setHeader("Content-disposition", "attachment; filename=test.pdf");
+			response.setHeader("Content-disposition", "attachment; filename=report.pdf");
 			reportService.generateVolunteerPDFReportStream(response.getOutputStream(), userId);
 		} else if (format.equals("CSV")) {
 			response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-			response.setHeader("Content-disposition", "attachment; filename=test.csv");
+			response.setHeader("Content-disposition", "attachment; filename=report.csv");
 			reportService.generateVolunteerCSVReportStream(response.getWriter(), userId);
 		} else {
 			throw new Exception("Unknown format");

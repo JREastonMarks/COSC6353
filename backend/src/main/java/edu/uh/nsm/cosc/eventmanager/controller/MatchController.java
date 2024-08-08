@@ -27,7 +27,7 @@ public class MatchController {
         this.userService = userService;
     }
     
-    @GetMapping
+    @GetMapping(path="/matches")
     List<Match> matchByUser(@AuthenticationPrincipal UserDetails userDetails) {
     	User user = userService.findUserByUsername(userDetails.getUsername());
     	return matchService.getMatches(user);

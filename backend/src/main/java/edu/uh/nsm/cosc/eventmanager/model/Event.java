@@ -53,12 +53,14 @@ public class Event implements Serializable{
     String urgency;
     
     @NotNull(message="Date must not be null")
-	private
     Date eventdate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Size(min=1, message="Event volunteers must not be null")
     List<User> volunteers;
+    
+    @ManyToOne
+    User administrator;
 
 
     public long getId(){
@@ -158,4 +160,12 @@ public class Event implements Serializable{
     public void setVolunteers(List<User> volunteers){
         this.volunteers=volunteers;
     }
+
+	public User getAdministrator() {
+		return administrator;
+	}
+
+	public void setAdministrator(User administrator) {
+		this.administrator = administrator;
+	}
 }
