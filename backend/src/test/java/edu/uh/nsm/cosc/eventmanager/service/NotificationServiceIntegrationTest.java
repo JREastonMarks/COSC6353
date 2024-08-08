@@ -30,6 +30,13 @@ public class NotificationServiceIntegrationTest {
 		assertThat(notificationService).isNotNull();
 	}
 	
+	
+	@Test
+	void testUserNotification() {
+		User receiver = userRepository.getReferenceById(1L);
+		List<Notification> notifications = notificationService.getNotifications(receiver);
+		assertThat(notifications.size()).isEqualTo(1);
+	}
 	@Test
 	void testNotifications() {
 		List<Notification> notifications = notificationService.getNotifications();

@@ -20,12 +20,12 @@ public class SkillController {
 	}
 	
 	@GetMapping(path="/skills")
-	List<Skill> states() {
+	List<Skill> skills() {
 		return skillService.getSkills();
 	}
 	
 	@GetMapping(path="/skill/{skillId}")
-	Skill state(@PathVariable(required=true) long skillId) {
+	Skill skill(@PathVariable(required=true) long skillId) {
 		return skillService.getSkill(skillId);
 	}
 }

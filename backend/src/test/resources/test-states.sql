@@ -2,11 +2,11 @@ DELETE FROM event_skills;
 DELETE FROM history;
 DELETE FROM eventmatch;
 DELETE FROM event;
-DELETE FROM states;
 DELETE FROM notification;
 DELETE FROM user_skills;
 DELETE FROM skill;
 DELETE FROM user;
+DELETE FROM states;
 
 INSERT INTO states (code, state) VALUES
 ('AL', 'Alabama'),

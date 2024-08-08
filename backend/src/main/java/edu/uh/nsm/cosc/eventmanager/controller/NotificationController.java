@@ -6,7 +6,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,11 +34,6 @@ public class NotificationController {
 	@GetMapping(path="/notification/{notificationId}")
 	Notification message(@PathVariable(required=true) long notificationId) {
 		return notificationService.getNotification(notificationId);
-	}
-	
-	@PostMapping(path="/notification")
-	void createNotification(Notification notification) {
-		notificationService.createNotification(notification);
 	}
 	
 }

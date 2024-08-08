@@ -1,12 +1,13 @@
 'use client'
 import useSWR from 'swr'
 import VolunteerHomePage from '../components/VolunteerHomePage'
+import AdminHomePage from '../components/AdminHomePage'
 
 function DisplayUserHome(props: any) {
     if(props.role === "volunteer") {
         return (<VolunteerHomePage></VolunteerHomePage>)
     } else {
-        return (<div>Admin</div>)
+        return (<AdminHomePage></AdminHomePage>)
     }
 }
 
