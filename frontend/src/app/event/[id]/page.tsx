@@ -368,7 +368,7 @@ const Events: React.FC<EventProps> = ({ id, name, desc, address, address2, city,
                             onChange={e => setEventId(e.target.value)}
                         />
                     </div>
-                    <button type="button" onClick={fetchEventById} className="mt-2 p-2 bg-blue-500 text-white">
+                    <button type="button" onClick={fetchEventById} className="mt-2 p-2 bg-sky-400 text-white">
                         Fetch Event
                     </button>
                     </div>
