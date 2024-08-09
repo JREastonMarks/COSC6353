@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +37,15 @@ public class EventController{
 
     @GetMapping(path="/event/{eventId}")
     Event event(@PathVariable(required=true) long eventId){
-        return eventService.getEvent(eventId);
+    	Event event =eventService.getEvent(eventId); 
+        return event;
     }
 
     @PostMapping(path="/event")
-    void createEvent(Event event){
-        eventService.createEvent(event);
+    Long createEvent(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Event event){
+    	User user = userService.findUserByUsername(userDetails.getUsername());
+    	event.setAdministrator(user);
+        Long id = eventService.createEvent(event);
+        return id;
     }  
 }

@@ -40,11 +40,11 @@ public class Match implements Serializable{
         this.id = id;
     }
 
-    public User getUser(){
+    public User getVolunteer(){
         return volunteer;
     }
 
-    public void setUser(User volunteer){
+    public void setVolunteer(User volunteer){
         this.volunteer = volunteer;
     }
 
@@ -67,16 +67,6 @@ public class Match implements Serializable{
 	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
-
-    public void setMatch(List<Skill> volSkills, List<Skill> evSkills){
-        match = false;
-        for (Skill volSkill : volSkills){
-            for(Skill evSkill : evSkills){
-                if (volSkill.equals(evSkill))
-                  match=true;  
-            }
-        }
-    }
 
 	
 }

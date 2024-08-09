@@ -54,8 +54,7 @@ public class MatchRepositoryIntegrationTest {
 
         Match match = new Match();
         match.setEvent(event);
-        match.setUser(volunteer);
-        match.setMatch(volunteer.getSkills(), event.getSkills());
+        match.setVolunteer(volunteer);
 
         matchRepository.save(match);
 

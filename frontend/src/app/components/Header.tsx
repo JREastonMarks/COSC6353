@@ -12,7 +12,6 @@ export default function Header() {
 
     // Check login
     const fetcher = (...args: any[]) => fetch(...args).then(res => {
-        console.log(res)
         if(res.redirected || res.status == 401) {
             window.location.href= "/login"
         }

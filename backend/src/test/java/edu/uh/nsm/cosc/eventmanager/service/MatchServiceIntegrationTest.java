@@ -73,8 +73,7 @@ public class MatchServiceIntegrationTest {
         
         Match match = new Match();
         match.setEvent(event);
-        match.setUser(volunteer);
-        match.setMatch(volunteer.getSkills(), event.getSkills());
+        match.setVolunteer(volunteer);
 
         matchService.createMatch(match);
 

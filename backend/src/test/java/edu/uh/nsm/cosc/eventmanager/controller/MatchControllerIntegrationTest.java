@@ -47,7 +47,6 @@ public class MatchControllerIntegrationTest {
         
         Match match = new Match();
         match.setId(1L);
-        match.setMatch(volunteer.getSkills(), event.getSkills());
 
         when(matchService.getMatch(1L)).thenReturn(match);
 
@@ -65,7 +64,7 @@ public class MatchControllerIntegrationTest {
         
         Match match = new Match();
         match.setId(1L);
-        match.setMatch(volunteer.getSkills(), event.getSkills());
+        
         
         List<Match> matches = new ArrayList<Match>();
         matches.add(match);

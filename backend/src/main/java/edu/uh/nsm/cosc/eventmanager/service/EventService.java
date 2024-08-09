@@ -21,11 +21,11 @@ public class EventService{
     }
 
     public Event getEvent(long eventId){
-        return eventRepository.getReferenceById(eventId);
+        return eventRepository.findById(eventId);
     }
 
-    public void createEvent(Event event){
-        eventRepository.save(event);
+    public Long createEvent(Event event){
+        return eventRepository.save(event).getId();
     }
 
 	public List<Event> getEvents(User user) {

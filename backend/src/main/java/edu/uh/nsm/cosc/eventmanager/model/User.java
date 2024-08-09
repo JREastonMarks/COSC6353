@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.uh.nsm.cosc.eventmanager.model.constraint.ValidRegistration;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
@@ -31,6 +35,7 @@ public class User implements Serializable {
 	@Column(unique= true)
 	String username;
 	
+	@JsonIgnore
 	String password;
 	
 	private String role;
@@ -69,13 +74,16 @@ public class User implements Serializable {
 	@Size(min=0, max=255, message="Preferences must be less than 255 characters")
 	String preferences;
 
+	@ElementCollection(fetch=FetchType.EAGER)
 	@Size(max=5, message="You can select up to 5 dates")
+	@Temporal(TemporalType.DATE)
     List<Date> selectedDates;
 	
 	String cellPhone;
 	
 	String workPhone;
 	
+	@Temporal(TemporalType.DATE)
 	Date birthdate;
 
 	Sex sex;

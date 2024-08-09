@@ -5,6 +5,7 @@ DELETE FROM event;
 DELETE FROM notification;
 DELETE FROM user_skills;
 DELETE FROM skill;
+DELETE FROM user_selected_dates;
 DELETE FROM user;
 DELETE FROM states;
 

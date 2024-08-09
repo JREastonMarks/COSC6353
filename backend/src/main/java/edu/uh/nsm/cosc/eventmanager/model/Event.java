@@ -14,6 +14,8 @@ import jakarta.validation.constraints.Size;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Event implements Serializable{
@@ -38,7 +40,7 @@ public class Event implements Serializable{
     @Size(min=1, max=100, message="City must be greater than one and less than 100")
     String city;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state", referencedColumnName="code")
     States state;
 
@@ -53,10 +55,10 @@ public class Event implements Serializable{
     String urgency;
     
     @NotNull(message="Date must not be null")
+    @Temporal(TemporalType.DATE)
     Date eventdate;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Size(min=1, message="Event volunteers must not be null")
     List<User> volunteers;
     
     @ManyToOne(fetch = FetchType.EAGER)

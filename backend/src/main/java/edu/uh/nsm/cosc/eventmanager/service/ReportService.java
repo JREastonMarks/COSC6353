@@ -92,7 +92,7 @@ public class ReportService {
             
             addHeader(table, "First Name#Last Name".split("#"));
             for(Match match : matches) {
-            	User user = match.getUser();
+            	User user = match.getVolunteer();
             	String[] values = new String[] {user.getFirstName(), user.getLastName()};
             	addRow(table, values);
             }
