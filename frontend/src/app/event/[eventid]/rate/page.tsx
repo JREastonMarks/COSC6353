@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 
 interface EventProps {
     id: number | null;
@@ -47,8 +48,41 @@ interface SkillOption {
     name: string;
 }
 
+const rateOptions = [
+    { value: 1, label: "Poor"},
+    { value: 2, label: "Below Average"},
+    { value: 3, label: "Average"},
+    { value: 4, label: "Good"},
+    { value: 5, label: "Excellent"}
+]
+
 export default function RateEventPage({ params }: { params: { eventid: number } }) {
     const [matches, setMatches] = useState<Match[]>([])
+
+    const handleSkillChange = (id: number, selectedOption: any) => {
+        const nextMatches = [...matches]
+        const myMatch = nextMatches.find((element) => element.id === id)
+        myMatch.rating = selectedOption.value
+        
+        setMatches(nextMatches)
+    };
+
+    const saveMatches = async (e) => {
+        const response = await fetch(`/api/match`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(matches),
+        });
+        if (response.ok) {
+            response.text().then((text) => {
+                window.location.replace("/home")
+            })
+        } else {
+            console.error('Failed to update event:', response.statusText);
+        }
+    }
 
     useEffect(() => {
         const fetchMatches = async () => {
@@ -66,8 +100,7 @@ export default function RateEventPage({ params }: { params: { eventid: number } 
                 Rate Volunteers
             </div>
             <div className="mb-4">
-                <table class="table-fixed" style={{width: '100%'}}>
-                    
+                <table className="table-fixed" style={{width: '100%'}}>      
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -78,12 +111,19 @@ export default function RateEventPage({ params }: { params: { eventid: number } 
                         {matches.map((match, i) => (
                             <tr>
                                 <td>{match.volunteer?.firstName + " " + match.volunteer?.lastName}</td>
-                                <td>{match.rating}</td>
+                                <td>
+                                    <Select options={rateOptions} value={match.rating} onChange={(e) => handleSkillChange(match.id, e)} id="ratings" name="ratings" isMulti={false} className="text-gray-900 placeholder:text-gray-400" />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <div className="mt-4 bg-sky-400 text-white">
+                    <button type="submit" className="p-2 w-full" onClick={saveMatches}>
+                        Save Ratings
+                    </button>
+                </div>
         </div>
 
     )
