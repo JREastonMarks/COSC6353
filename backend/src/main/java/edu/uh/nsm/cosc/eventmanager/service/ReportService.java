@@ -28,6 +28,9 @@ import edu.uh.nsm.cosc.eventmanager.repository.EventRepository;
 import edu.uh.nsm.cosc.eventmanager.repository.MatchRepository;
 import edu.uh.nsm.cosc.eventmanager.repository.UserRepository;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+
 @Service
 public class ReportService {
 	
@@ -43,33 +46,57 @@ public class ReportService {
 
 	
 	public void generateVolunteerPDFReportStream(OutputStream stream, long userId) throws IOException {
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 		try (Document document = new Document(new PdfDocument(new PdfWriter(stream)))) {
 			User user = userRepository.findById(userId);
 			
 			
 			document.add(new Paragraph(user.getFirstName() + " " + user.getLastName()));
 			
-			Table table = new Table(UnitValue.createPercentArray(2)).useAllAvailableWidth();
+			Table table = new Table(UnitValue.createPercentArray(4)).useAllAvailableWidth();
 			
 			List<Match> matches = matchRepository.findByVolunteer(user);
 			
-			addHeader(table, "Event Name#Event Date".split("#"));
+			addHeader(table, "Event Name#Event Description#Date#Rating".split("#"));
 			
 			for(Match match : matches) {
 				
 				Event event = match.getEvent();
-				String[] values = new String[] { event.getName(), event.getDescription() };
+				String[] values = {};
+				if(match.getRating() == null) {
+					values = new String[] {event.getName(), event.getDescription(), formatter.format(event.getEventdate()), "Not Rated"};
+				} else {
+					values = new String[] {event.getName(), event.getDescription(), formatter.format(event.getEventdate()), Integer.toString(match.getRating())};
+				}
 				addRow(table, values);
 			}
-			
+			document.add(table);
 		}
 		stream.close();
 	}
 
-	public void generateVolunteerCSVReportStream(Writer response, long userId) {
-		// TODO Auto-generated method stub
+	public void generateVolunteerCSVReportStream(Writer response, long userId) throws IOException {
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
 		User user = userRepository.findById(userId);
-		List<Match> match = matchRepository.findByVolunteer(user);
+		List<Match> matches = matchRepository.findByVolunteer(user);
+		
+		CSVWriter writer = (CSVWriter) new CSVWriterBuilder(response).withSeparator(',').build();
+		String[] entries = "Event Name#Event Description#Date#Rating".split("#");
+		writer.writeNext(entries);
+		
+		for(Match match : matches) {
+			Event event = match.getEvent();
+			String[] values = {};
+			if(match.getRating() == null) {
+				values = new String[] {event.getName(), event.getDescription(), formatter.format(event.getEventdate()), "Not Rated"};
+			} else {
+				values = new String[] {event.getName(), event.getDescription(), formatter.format(event.getEventdate()), Integer.toString(match.getRating())};
+			}
+			writer.writeNext(values);
+			
+		}
+		writer.close();
 	}
 
 
@@ -86,14 +113,19 @@ public class ReportService {
             }
             document.add(new Paragraph(event.getCity() + ", " + event.getState().getCode() + " " + event.getZipcode()));
             
-            Table table = new Table(UnitValue.createPercentArray(2)).useAllAvailableWidth();
+            Table table = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
             
             List<Match> matches = matchRepository.findByEvent(event);
             
-            addHeader(table, "First Name#Last Name".split("#"));
+            addHeader(table, "First Name#Last Name#Rating".split("#"));
             for(Match match : matches) {
             	User user = match.getVolunteer();
-            	String[] values = new String[] {user.getFirstName(), user.getLastName()};
+            	String[] values = {};
+    			if(match.getRating() == null) {
+    				values = new String[] {user.getFirstName(), user.getLastName(), "Not Rated"};
+    			} else {
+    				values = new String[] {user.getFirstName(), user.getLastName(), Integer.toString(match.getRating())};
+    			}
             	addRow(table, values);
             }
             
@@ -107,10 +139,22 @@ public class ReportService {
 		
 		Event event = eventRepository.findById(eventId);
 		
-		
 		CSVWriter writer = (CSVWriter) new CSVWriterBuilder(response).withSeparator(',').build();
-		String[] entries = "first#second#third".split("#");
+		String[] entries = "First Name#Last Name#Rating".split("#");
 		writer.writeNext(entries);
+		
+		List<Match> matches = matchRepository.findByEvent(event);
+		for(Match match : matches) {
+        	User user = match.getVolunteer();
+        	String[] values = {};
+			if(match.getRating() == null) {
+				values = new String[] {user.getFirstName(), user.getLastName(), "Not Rated"};
+			} else {
+				values = new String[] {user.getFirstName(), user.getLastName(), Integer.toString(match.getRating())};
+			}
+        	writer.writeNext(values);
+		}
+		
 		writer.close();
 	}
 	
